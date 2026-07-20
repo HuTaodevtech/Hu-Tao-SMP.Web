@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hu Tao SMP — Server Minecraft Survival</title>
+
+    <!-- Google Fonts: Fraunces (judul), Work Sans (teks), Silkscreen (aksen pixel) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ==========================================================
+       1. VARIABEL WARNA & RESET DASAR
+       ========================================================== */
+        :root {
+            --bg: #120a0c;
+            --bg-alt: #1b1013;
+            --panel: #201417;
+            --maroon: #4a1418;
+            --maroon-deep: #2b0d10;
+            --gold: #e3ac3d;
+            --gold-bright: #f4c95d;
+            --ember: #ff6b35;
+            --cream: #f2e6d3;
+            --ghost: #f5f0e8;
+            --line: rgba(227, 172, 61, 0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 107, 53, 0.10), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 10%, rgba(227, 172, 61, 0.06), transparent),
+                var(--bg);
+            color: var(--cream);
+            font-family: 'Work Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .display {
+            font-family: 'Fraunces', serif;
+        }
+
+        .pixel {
+            font-family: 'Silkscreen', monospace;
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+
+        /* ==========================================================
+       2. EFEK ABU BARA TERBANG (background dekoratif)
+       ========================================================== */
+        .embers {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .ember-dot {
+            position: absolute;
+            bottom: -10px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--ember);
+            opacity: .55;
+            filter: blur(0.5px);
+            animation: float 14s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: .6;
+            }
+
+            90% {
+                opacity: .4;
+            }
+
+            100% {
+                transform: translateY(-110vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+
+        /* ==========================================================
+       3. NAVBAR
+       ========================================================== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(18, 10, 12, 0.82);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        nav.wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: .02em;
+            color: var(--gold-bright);
+        }
+
+        .brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+        }
+
+        .navlinks {
+            display: flex;
+            gap: 28px;
+            font-size: .92rem;
+            color: var(--cream);
+            opacity: .85;
+        }
+
+        .navlinks a:hover {
+            color: var(--gold-bright);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--ember), #c23b1f);
+            color: #1a0906;
+            font-weight: 700;
+            font-size: .85rem;
+            letter-spacing: .02em;
+            padding: 10px 20px;
+            border-radius: 6px;
+            box-shadow: 0 6px 18px rgba(255, 107, 53, .25);
+        }
+
+        @media (max-width: 760px) {
+            .navlinks {
+                display: none;
+            }
+        }
+
+
+        /* ==========================================================
+       4. HERO
+       ========================================================== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            padding: 64px 0 40px;
+            text-align: center;
+        }
+
+        .banner-frame {
+            max-width: 760px;
+            margin: 0 auto 36px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 16px;
+            margin-bottom: 22px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: .72rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--ember);
+            box-shadow: 0 0 8px var(--ember);
+        }
+
+        h1.title {
+            font-size: clamp(2.6rem, 7vw, 4.6rem);
+            font-weight: 700;
+            line-height: 1.02;
+            color: var(--gold-bright);
+            text-shadow: 0 2px 30px rgba(227, 172, 61, .25);
+        }
+
+        h1.title em {
+            display: block;
+            margin-top: 10px;
+            font-style: italic;
+            font-weight: 500;
+            font-size: .42em;
+            letter-spacing: .04em;
+            color: var(--cream);
+        }
+
+        .hero p.sub {
+            max-width: 560px;
+            margin: 22px auto 34px;
+            color: var(--cream);
+            opacity: .78;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 26px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ember), #c23b1f);
+            color: #1a0906;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, .3);
+        }
+
+        .btn-ghost {
+            background: rgba(227, 172, 61, .06);
+            border: 1px solid var(--line);
+            color: var(--gold-bright);
+        }
+
+        .pillrow {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 44px;
+        }
+
+        .pill {
+            padding: 9px 20px;
+            border: 1px dashed var(--line);
+            border-radius: 999px;
+            font-size: .82rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--cream);
+            opacity: .85;
+        }
+
+
+        /* ==========================================================
+       5. JUDUL SEKSI (dipakai berulang di tiap section)
+       ========================================================== */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 90px 0;
+        }
+
+        .section-head {
+            max-width: 640px;
+            margin: 0 auto 56px;
+            text-align: center;
+        }
+
+        .section-head .kicker {
+            display: block;
+            margin-bottom: 14px;
+            font-family: 'Silkscreen';
+            font-size: .68rem;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--ember);
+        }
+
+        .section-head h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        .section-head p {
+            margin-top: 14px;
+            color: var(--cream);
+            opacity: .72;
+            line-height: 1.6;
+        }
+
+        .divider {
+            width: 1px;
+            height: 56px;
+            margin: 0 auto;
+            background: linear-gradient(var(--gold), transparent);
+        }
+
+
+        /* ==========================================================
+       6. KARTU RANK — GAYA "TIKET WANGSHENG"
+       ========================================================== */
+        .ranks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        @media (max-width: 900px) {
+            .ranks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ranks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ticket {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 26px 24px 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+        }
+
+        /* lubang "sobekan tiket" di kiri-kanan kartu */
+        .ticket::before,
+        .ticket::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--bg);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .ticket::before {
+            left: -10px;
+        }
+
+        .ticket::after {
+            right: -10px;
+        }
+
+        .ticket .perf {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 96px;
+            border-top: 1px dashed var(--line);
+        }
+
+        .ticket-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .ticket-no {
+            font-family: 'Silkscreen';
+            font-size: .68rem;
+            letter-spacing: .1em;
+            color: var(--ember);
+        }
+
+        .ticket-seal {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            font-family: 'Silkscreen';
+            font-size: .62rem;
+            line-height: 1.1;
+            text-align: center;
+            color: var(--gold-bright);
+        }
+
+        .ticket h3 {
+            margin-top: 10px;
+            font-family: 'Fraunces', serif;
+            font-size: 1.36rem;
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        .ticket .price {
+            margin-top: 2px;
+            font-family: 'Fraunces', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--cream);
+        }
+
+        .ticket .price small {
+            font-family: 'Work Sans';
+            font-size: .55em;
+            font-weight: 400;
+            opacity: .6;
+        }
+
+        .ticket ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .ticket ul li {
+            position: relative;
+            padding-left: 18px;
+            font-size: .86rem;
+            opacity: .82;
+        }
+
+        .ticket ul li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--ember);
+        }
+
+        .ticket .buy {
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .ticket .buy a {
+            display: block;
+            text-align: center;
+            padding: 11px;
+            border-radius: 6px;
+            background: rgba(227, 172, 61, .1);
+            border: 1px solid var(--gold);
+            color: var(--gold-bright);
+            font-weight: 600;
+            font-size: .85rem;
+            transition: .15s;
+        }
+
+        .ticket .buy a:hover {
+            background: var(--gold);
+            color: #1a0906;
+        }
+
+        /* kartu rank paling atas dibuat sedikit menonjol */
+        .ticket.top {
+            border-color: var(--gold);
+        }
+
+        .ticket.top .ticket-seal {
+            background: var(--gold);
+            color: #1a0906;
+        }
+
+
+        /* ==========================================================
+       7. TOP UP (Money / Point / Skill)
+       ========================================================== */
+        .topup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        @media (max-width: 860px) {
+            .topup-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                margin: 0 auto;
+            }
+        }
+
+        .topup-card {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .topup-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font-size: 1.3rem;
+        }
+
+        .topup-card h3 {
+            font-family: 'Fraunces';
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        .topup-rate {
+            font-size: .85rem;
+            opacity: .72;
+        }
+
+        .topup-rate b {
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        /* stepper kuantitas (tombol - / angka / tombol +) */
+        .stepper {
+            display: flex;
+            align-items: center;
+            margin-top: 4px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stepper button {
+            width: 38px;
+            height: 40px;
+            background: var(--maroon-deep);
+            color: var(--gold-bright);
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .stepper button:hover {
+            background: var(--maroon);
+        }
+
+        .stepper input {
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--cream);
+            font-family: 'Silkscreen';
+            font-size: .95rem;
+        }
+
+        .stepper input:focus {
+            outline: none;
+        }
+
+        .topup-total {
+            font-family: 'Fraunces';
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--cream);
+        }
+
+        .topup-total span {
+            color: var(--gold-bright);
+        }
+
+        .topup-card .buy a {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--ember), #c23b1f);
+            color: #1a0906;
+            font-weight: 700;
+            font-size: .85rem;
+        }
+
+
+        /* ==========================================================
+       8. FOOTER
+       ========================================================== */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 48px 0 34px;
+            text-align: center;
+            border-top: 1px solid var(--line);
+        }
+
+        .ip-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 12px 20px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-family: 'Silkscreen';
+            font-size: .95rem;
+            color: var(--gold-bright);
+            cursor: pointer;
+        }
+
+        .ip-box small {
+            font-family: 'Work Sans';
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            opacity: .6;
+        }
+
+        .foot-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-bottom: 18px;
+            font-size: .85rem;
+        }
+
+        .foot-links a {
+            opacity: .75;
+        }
+
+        .foot-links a:hover {
+            opacity: 1;
+            color: var(--gold-bright);
+        }
+
+        footer p {
+            margin-top: 6px;
+            font-size: .82rem;
+            opacity: .55;
+        }
+
+
+        /* ==========================================================
+       9. ANIMASI MUNCUL SAAT SCROLL + AKSESIBILITAS
+       ========================================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .ember-dot {
+                display: none;
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Titik-titik abu bara mengambang, dibuat lewat JS di bagian bawah -->
+    <div class="embers" id="embers"></div>
+
+    <!-- ============ NAVBAR ============ -->
+    <header>
+        <nav class="wrap">
+            <div class="brand">
+                <img src="server-icon.png.png" alt="Logo Hu Tao SMP">
+                Hu Tao SMP
+            </div>
+
+            <div class="navlinks">
+                <a href="#rank">Rank</a>
+                <a href="#topup">Top Up</a>
+                <a href="#footer">Server Info</a>
+            </div>
+
+            <a class="nav-cta"
+                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
+                target="_blank" rel="noopener">
+                Chat Admin
+            </a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- ============ HERO ============ -->
+        <section class="hero wrap">
+            <span class="eyebrow"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
+
+            <div class="banner-frame reveal">
+                <img src="sads.png" alt="Hu Tao SMP Banner">
+            </div>
+
+            <h1 class="title">
+                Hu Tao SMP
+                <em>Survival Seru, Teman Baru, Petualangan Tanpa Batas!</em>
+            </h1>
+
+            <p class="sub">
+                Server Minecraft survival bertema oriental dengan ekonomi hidup dan komunitas hangat.
+                Bangun rumahmu, kumpulkan cuan, naik rank, dan jadi bagian dari keluarga Wangsheng.
+            </p>
+
+            <div class="hero-ctas">
+                <a class="btn btn-primary" href="https://chat.whatsapp.com/JgSKX5OjKLU30SxYpjv9nX?s=cl&p=a&ilr=0&amv=3"
+                    target="_blank" rel="noopener">
+                    Gabung via WhatsApp →
+                </a>
+                <a class="btn btn-ghost" href="#rank">Lihat Rank</a>
+            </div>
+
+            <div class="pillrow">
+                <span class="pill">Survival</span>
+                <span class="pill">Economy</span>
+                <span class="pill">AFK</span>
+                <span class="pill">PvP</span>
+                <span class="pill">Community</span>
+            </div>
+        </section>
+
+        <!-- ============ RANK ============ -->
+        <section class="section" id="rank">
+            <div class="wrap">
+
+                <div class="section-head reveal">
+                    <span class="kicker">Tiket Keanggotaan</span>
+                    <h2>Pilih Rank-mu</h2>
+                    <p>Setiap rank adalah "tiket" resmi dari Wangsheng — makin tinggi rank, makin banyak fasilitas yang
+                        kamu dapat di dunia Hu Tao SMP.</p>
+                </div>
+
+                <div class="ranks-grid">
+
+                    <!-- Rank 1 -->
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 01 / YELAN</span>
+                            <div class="ticket-seal">遣<br>使</div>
+                        </div>
+                        <h3>Yelan</h3>
+                        <div class="price">Rp15.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 15.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 5</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv3</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                        </ul>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Kurir%20Wangsheng%20(Rp15.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <!-- Rank 2 -->
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 02 / BENNET</span>
+                            <div class="ticket-seal">助<br>理</div>
+                        </div>
+                        <h3>Bennet</h3>
+                        <div class="price">Rp35.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 35.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 8</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv5</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <br>
+                        </ul>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur yelan</span>
+                        </div>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Asisten%20Toko%20(Rp25.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <!-- Rank 3 -->
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 03 / XINGQIU</span>
+                            <div class="ticket-seal">守<br>衛</div>
+                        </div>
+                        <h3>XingQiu</h3>
+                        <div class="price">Rp65.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 70.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 12</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv8</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                        </ul>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur Bennet</span>
+                        </div>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Penjaga%20Altar%20(Rp40.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <!-- Rank 4 -->
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 04 / ZHONGLI</span>
+                            <div class="ticket-seal">管<br>理</div>
+                        </div>
+                        <h3>ZhongLi</h3>
+                        <div class="price">Rp120.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 100.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 15</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv12</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee </li>
+                        </ul>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur XingQiu</span>
+                        </div>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Pengelola%20Peti%20(Rp60.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <!-- Rank 5 -->
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 05 / XIANGLENG</span>
+                            <div class="ticket-seal">董<br>事</div>
+                        </div>
+                        <h3>XiangLing</h3>
+                        <div class="price">Rp150.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 150.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 20</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv16</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee</li>
+                            <li>/tp</li>
+                        </ul>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur ZhongLi</span>
+                        </div>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Direktur%20Bayangan%20(Rp85.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <!-- Rank 6 (tertinggi) -->
+                    <div class="ticket top reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 06 / HU TAO</span>
+                            <div class="ticket-seal">冥<br>王</div>
+                        </div>
+                        <h3>Hu Tao</h3>
+                        <div class="price">Rp300.000<small>/permanen</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 8px;">Claim block unlimited</span>
+                            <span class="pill" style="font-size: 8px;">Sethome unlimited</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv20</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee</li>
+                            <li>/tp</li>
+                            <li>/speed</li>
+                            <li>//wand</li>
+                            <h3>+ Boost skill</h3>
+                        </ul>
+                        <br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur XiangLing</span>
+                        </div>
+                        <div class="buy">
+                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Hu%20Tao%27s%20Circle%20(Rp120.000)%20IGN%3A%20"
+                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ============ TOP UP ============ -->
+        <section class="section" id="topup">
+            <div class="wrap">
+
+                <div class="section-head reveal">
+                    <span class="kicker">Isi Ulang Saldo</span>
+                    <h2>Top Up Money, Point & Skill</h2>
+                    <p>Atur jumlah yang kamu mau, total harga terhitung otomatis, lalu kirim pesanan langsung ke admin
+                        via WhatsApp.</p>
+                </div>
+
+                <div class="topup-grid">
+
+                    <!-- Money -->
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">💰</div>
+                        <h3>Money</h3>
+                        <div class="topup-rate">Rp100rb (in-game) = <b>Rp5.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('money', -1)">−</button>
+                            <input type="text" id="money-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('money', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="money-total">Rp5.000</span></div>
+                        <div class="buy"><a id="money-link" href="#" target="_blank" rel="noopener">Pesan via
+                                WhatsApp</a></div>
+                    </div>
+
+                    <!-- Point -->
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">✨</div>
+                        <h3>Point</h3>
+                        <div class="topup-rate">20 Point = <b>Rp1.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('point', -1)">−</button>
+                            <input type="text" id="point-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('point', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="point-total">Rp1.000</span></div>
+                        <div class="buy"><a id="point-link" href="#" target="_blank" rel="noopener">Pesan via
+                                WhatsApp</a></div>
+                    </div>
+
+                    <!-- Skill -->
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">🔥</div>
+                        <h3>Skill</h3>
+                        <div class="topup-rate">1 Skill = <b>Rp7.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('skill', -1)">−</button>
+                            <input type="text" id="skill-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('skill', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="skill-total">Rp7.000</span></div>
+                        <div class="buy"><a id="skill-link" href="#" target="_blank" rel="noopener">Pesan via
+                                WhatsApp</a></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer">
+        <div class="wrap">
+            <div class="ip-box" onclick="copyIP()">
+                <div><small>Server IP</small><br>hu-tao.nexuscloud.id</div>
+            </div>
+            <div class="ip-box" onclick="copyPort()">
+                <div><small>Port</small><br>25502</div>
+            </div>
+
+            <div class="foot-links">
+                <a href="https://chat.whatsapp.com/JgSKX5OjKLU30SxYpjv9nX?s=cl&p=a&ilr=0&amv=3" target="_blank" rel="noopener">WhatsApp</a>
+                <a href="https://discord.gg/TuKNkSFM5" target="_blank" rel="noopener">Discord</a>
+                <a href="https://www.tiktok.com/@hu.tao.smp?_r=1&_t=ZS-98BG7XpfNbj">TikTok</a>
+            </div>
+
+            <p>© 2026 Hu Tao SMP — Wangsheng Funeral Parlor. Tidak berafiliasi dengan Mojang / Microsoft.</p>
+        </div>
+    </footer>
+
+    <script>
+
+        /* ----------------------------------------------------------
+           Nomor WhatsApp admin — ganti sekali di sini kalau perlu,
+           tapi tombol-tombol di HTML di atas masih pakai angka manual
+           jadi tetap cek satu-satu ya kalau nomor berubah.
+        ---------------------------------------------------------- */
+        const WA_NUMBER = "6285761779383";
+
+        /* ----------------------------------------------------------
+           Efek abu bara: bikin beberapa titik lalu kasih posisi
+           dan durasi animasi acak biar terlihat natural.
+        ---------------------------------------------------------- */
+        const emberContainer = document.getElementById('embers');
+        const TOTAL_EMBERS = 24;
+
+        for (let i = 0; i < TOTAL_EMBERS; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'ember-dot';
+            dot.style.left = Math.random() * 100 + '%';
+            dot.style.animationDelay = Math.random() * 14 + 's';
+            dot.style.animationDuration = (10 + Math.random() * 10) + 's';
+            emberContainer.appendChild(dot);
+        }
+
+        /* ----------------------------------------------------------
+           Animasi muncul saat elemen ".reveal" masuk viewport.
+        ---------------------------------------------------------- */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+        /* ----------------------------------------------------------
+           Kalkulator Top Up (Money / Point / Skill).
+           Tiap item punya harga satuan, label untuk pesan WA,
+           dan jumlah yang bisa diubah lewat tombol +/-.
+        ---------------------------------------------------------- */
+        const topupRates = {
+            money: 5000,
+            point: 1000,
+            skill: 7000,
+        };
+
+        const topupLabels = {
+            money: 'Rp100rb Money',
+            point: '20 Point',
+            skill: '1 Skill',
+        };
+
+        const topupQty = {
+            money: 1,
+            point: 1,
+            skill: 1,
+        };
+
+        function formatRupiah(amount) {
+            return 'Rp' + amount.toLocaleString('id-ID');
+        }
+
+        function updateTopupCard(itemKey) {
+            const quantity = topupQty[itemKey];
+            const total = quantity * topupRates[itemKey];
+
+            document.getElementById(itemKey + '-qty').value = quantity;
+            document.getElementById(itemKey + '-total').textContent = formatRupiah(total);
+
+            const message =
+                `Halo Admin, saya mau top up ${topupLabels[itemKey]} sebanyak ${quantity}x ` +
+                `(Total ${formatRupiah(total)}). IGN: `;
+
+            document.getElementById(itemKey + '-link').href =
+                `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+        }
+
+        function stepQty(itemKey, delta) {
+            const MIN_QTY = 1;
+            const MAX_QTY = 99;
+            topupQty[itemKey] = Math.min(MAX_QTY, Math.max(MIN_QTY, topupQty[itemKey] + delta));
+            updateTopupCard(itemKey);
+        }
+
+        // set nilai awal saat halaman pertama kali dimuat
+        Object.keys(topupRates).forEach(updateTopupCard);
+
+        /* ----------------------------------------------------------
+           Salin IP server ke clipboard saat kotak IP diklik.
+        ---------------------------------------------------------- */
+        function copyIP() {
+            const SERVER_IP = 'hu-tao.nexuscloud.id';
+
+            navigator.clipboard.writeText(SERVER_IP).then(() => {
+                const label = document.querySelector('.ip-box small');
+                const originalText = label.textContent;
+
+                label.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    label.textContent = originalText;
+                }, 1500);
+            });
+        }
+        function copyPort() {
+            const PORT = '25502';
+
+            navigator.clipboard.writeText(PORT).then(() => {
+                const label = document.querySelector('.ip-box small');
+                const originalText = label.textContent;
+
+                label.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    label.textContent = originalText;
+                }, 1500);
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

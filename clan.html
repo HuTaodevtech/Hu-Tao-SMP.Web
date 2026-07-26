@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Clan — Hu Tao SMP</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #120a0c;
+            --bg-alt: #1b1013;
+            --panel: #201417;
+            --maroon: #4a1418;
+            --maroon-deep: #2b0d10;
+            --gold: #e3ac3d;
+            --gold-bright: #f4c95d;
+            --ember: #ff6b35;
+            --cream: #f2e6d3;
+            --ghost: #f5f0e8;
+            --line: rgba(227, 172, 61, 0.28);
+            --green: #6fbf73;
+            --red: #e3593d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 107, 53, 0.10), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 10%, rgba(227, 172, 61, 0.06), transparent),
+                var(--bg);
+            color: var(--cream);
+            font-family: 'Work Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+        .display { font-family: 'Fraunces', serif; }
+        .pixel { font-family: 'Silkscreen', monospace; }
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+        .embers { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+
+        .ember-dot {
+            position: absolute; bottom: -10px; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--ember); opacity: .55; filter: blur(0.5px); animation: float 14s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: .6; }
+            90% { opacity: .4; }
+            100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+        }
+
+        header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(18, 10, 12, 0.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+        }
+
+        nav.wrap { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+
+        .brand { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; color: var(--gold-bright); }
+        .brand img { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); }
+        .navlinks { display: flex; gap: 28px; font-size: .92rem; color: var(--cream); opacity: .85; }
+        .navlinks a:hover { color: var(--gold-bright); }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--ember), #c23b1f); color: #1a0906; font-weight: 700;
+            font-size: .85rem; padding: 10px 20px; border-radius: 6px; box-shadow: 0 6px 18px rgba(255, 107, 53, .25);
+        }
+
+        .hamburger {
+            display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px;
+            background: rgba(227, 172, 61, .06); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; z-index: 60;
+        }
+
+        .hamburger span {
+            display: block; width: 18px; height: 2px; margin: 0 auto; background: var(--gold-bright);
+            border-radius: 2px; transition: transform .2s ease, opacity .2s ease;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .mobile-menu {
+            position: fixed; top: 70px; left: 0; right: 0; z-index: 49; display: flex; flex-direction: column;
+            max-height: 0; overflow: hidden; background: rgba(18, 10, 12, 0.97); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line); transition: max-height .3s ease;
+        }
+
+        .mobile-menu.open { max-height: 420px; }
+        .mobile-menu a { padding: 16px 24px; font-size: 1rem; color: var(--cream); border-bottom: 1px solid var(--line); }
+
+        .mobile-menu a.chat-admin-link {
+            margin: 10px 24px 18px; padding: 13px; text-align: center; border: 1px solid var(--gold);
+            border-radius: 8px; background: rgba(227, 172, 61, .1); color: var(--gold-bright); font-weight: 600;
+        }
+
+        @media (max-width: 760px) {
+            .navlinks { display: none; }
+            .nav-cta { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        @media (min-width: 761px) {
+            .hamburger { display: none; }
+            .mobile-menu { display: none; }
+        }
+
+        .hero { position: relative; z-index: 1; padding: 64px 0 20px; text-align: center; }
+
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px; margin-bottom: 22px;
+            border: 1px solid var(--line); border-radius: 999px; font-size: .72rem; letter-spacing: .18em;
+            text-transform: uppercase; color: var(--gold);
+        }
+
+        .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px var(--ember); }
+
+        h1.title {
+            font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 700; line-height: 1.05; color: var(--gold-bright);
+            text-shadow: 0 2px 30px rgba(227, 172, 61, .25);
+        }
+
+        .hero p.sub { max-width: 560px; margin: 20px auto 0; color: var(--cream); opacity: .78; font-size: 1.02rem; line-height: 1.6; }
+
+        .section { position: relative; z-index: 1; padding: 60px 0 90px; }
+        .section-head { max-width: 640px; margin: 0 auto 48px; text-align: center; }
+
+        .section-head .kicker {
+            display: block; margin-bottom: 14px; font-family: 'Silkscreen'; font-size: .68rem;
+            letter-spacing: .22em; text-transform: uppercase; color: var(--ember);
+        }
+
+        .section-head h2 { font-family: 'Fraunces', serif; font-size: clamp(1.9rem, 4vw, 2.5rem); font-weight: 600; color: var(--gold-bright); }
+        .section-head p { margin-top: 14px; color: var(--cream); opacity: .72; line-height: 1.6; }
+
+        .clans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+
+        @media (max-width: 900px) { .clans-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 620px) { .clans-grid { grid-template-columns: 1fr; } }
+
+        .clan-card {
+            display: flex; flex-direction: column; gap: 14px; background: var(--panel); border: 1px solid var(--line);
+            border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            transition: transform .15s ease, border-color .15s ease;
+        }
+
+        .clan-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+        .clan-top { display: flex; align-items: center; gap: 14px; }
+
+        .clan-logo {
+            width: 56px; height: 56px; flex-shrink: 0; border-radius: 10px; border: 1.5px solid var(--gold);
+            object-fit: cover; background: var(--maroon-deep);
+        }
+
+        .clan-name-wrap { min-width: 0; }
+
+        .clan-name {
+            font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; color: var(--gold-bright);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .clan-tag { font-family: 'Silkscreen'; font-size: .62rem; letter-spacing: .08em; color: var(--ember); margin-top: 3px; }
+
+        .clan-motto {
+            font-style: italic; font-size: .9rem; line-height: 1.55; color: var(--cream); opacity: .82;
+            border-left: 2px solid var(--line); padding-left: 12px;
+        }
+
+        .clan-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .clan-players { font-family: 'Silkscreen'; font-size: .8rem; color: var(--cream); opacity: .85; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px;
+            font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+        }
+
+        .status-badge .sdot { width: 6px; height: 6px; border-radius: 50%; }
+
+        .status-open { background: rgba(111, 191, 115, .12); color: var(--green); border: 1px solid rgba(111, 191, 115, .35); }
+        .status-open .sdot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+        .status-full { background: rgba(227, 89, 61, .12); color: var(--red); border: 1px solid rgba(227, 89, 61, .35); }
+        .status-full .sdot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+        .clan-join { margin-top: auto; padding-top: 6px; }
+
+        .clan-join a {
+            display: block; text-align: center; padding: 11px; border-radius: 6px; background: rgba(227, 172, 61, .1);
+            border: 1px solid var(--gold); color: var(--gold-bright); font-weight: 600; font-size: .85rem; transition: .15s;
+        }
+
+        .clan-join a:hover { background: var(--gold); color: #1a0906; }
+
+        .clan-join a.disabled { opacity: .45; pointer-events: none; border-color: var(--line); color: var(--cream); }
+
+        .register-cta {
+            margin-top: 64px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center;
+            background: var(--panel); border: 1px dashed var(--line); border-radius: 16px; padding: 46px 28px;
+        }
+
+        .register-cta h3 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; color: var(--gold-bright); }
+        .register-cta p { max-width: 460px; color: var(--cream); opacity: .75; line-height: 1.6; font-size: .95rem; }
+
+        .btn-cta {
+            display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 8px;
+            font-weight: 700; font-size: .95rem; background: linear-gradient(135deg, var(--ember), #c23b1f);
+            color: #1a0906; box-shadow: 0 10px 30px rgba(255, 107, 53, .3); transition: transform .15s ease;
+        }
+
+        .btn-cta:hover { transform: translateY(-2px); }
+
+        footer { position: relative; z-index: 1; padding: 40px 0 30px; text-align: center; border-top: 1px solid var(--line); }
+        footer p { font-size: .82rem; opacity: .55; }
+
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.in { opacity: 1; transform: translateY(0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .ember-dot { display: none; animation: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="embers" id="embers"></div>
+
+    <header>
+        <nav class="wrap">
+            <div class="brand">
+                <img src="server-icon.png.png" alt="Logo Hu Tao SMP">
+                Hu Tao SMP
+            </div>
+            <div class="navlinks">
+                <a href="index.html#rank">Rank</a>
+                <a href="index.html#topup">Top Up</a>
+                <a href="#clan">Clan</a>
+                <a href="index.html#footer">Server Info</a>
+            </div>
+            <a class="nav-cta"
+                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
+                target="_blank" rel="noopener">
+                Chat Admin
+            </a>
+
+            <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html#rank" onclick="closeMobileMenu()">Rank</a>
+            <a href="index.html#topup" onclick="closeMobileMenu()">Top Up</a>
+            <a href="#clan" onclick="closeMobileMenu()">Clan</a>
+            <a href="index.html#footer" onclick="closeMobileMenu()">Server Info</a>
+            <a class="chat-admin-link"
+                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
+                target="_blank" rel="noopener">
+                Chat Admin
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero wrap">
+            <span class="eyebrow"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
+            <h1 class="title">Daftar Clan</h1>
+            <p class="sub">
+                Cari clan yang cocok buat kamu, atau lihat siapa aja yang udah eksis di Hu Tao SMP.
+                Klik "Chat Ketua Clan" buat langsung ngobrol via WhatsApp.
+            </p>
+        </section>
+
+        <section class="section" id="clan">
+            <div class="wrap">
+
+                <div class="section-head reveal">
+                    <span class="kicker">Komunitas Wangsheng</span>
+                    <h2>Clan yang Tersedia</h2>
+                    <p>Setiap clan punya gaya dan kebiasaan main sendiri-sendiri — cek dulu isinya sebelum gabung ya!</p>
+                </div>
+
+                <div class="clans-grid" id="clan-grid"></div>
+
+                <div class="register-cta reveal">
+                    <h3>Punya Clan? Daftarin di Web Ini!</h3>
+                    <p>
+                        Mau clan kamu muncul di halaman ini lengkap dengan logo, jumlah player, dan status
+                        open/penuh? Chat langsung ke admin, nanti dibantu setup.
+                    </p>
+                    <a class="btn-cta"
+                        href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20daftarin%20clan%20saya%20di%20web%20Hu%20Tao%20SMP.%20Nama%20Clan%3A%20"
+                        target="_blank" rel="noopener">
+                        Daftar Clan di Web →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            <p>© 2026 Hu Tao SMP — Wangsheng Funeral Parlor. Tidak berafiliasi dengan Mojang / Microsoft.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 760) closeMobileMenu();
+        });
+
+        /* ============================================================
+           DATA CLAN — EDIT DI SINI AJA
+           ------------------------------------------------------------
+           name        : nama clan
+           tag         : kode/tag singkat clan (contoh: [WGS])
+           logo        : path/url ke gambar logo clan (persegi lebih bagus).
+                         Bisa pakai FILE LOKAL, contoh: "bakso.png"
+                         (taruh file gambarnya SATU FOLDER dengan file HTML ini)
+                         ATAU pakai LINK URL gambar, contoh: https://...
+           motto       : kata-kata / motto clan
+           players     : jumlah player sekarang
+           maxPlayers  : kapasitas maksimal clan
+           status      : "open" (masih buka) atau "full" (penuh)
+           waNumber    : nomor WA ketua clan, format 62xxxxxxxxxx (tanpa +, tanpa 0 di depan)
+           leaderName  : nama ketua clan (opsional, buat teks pesan WA)
+        ============================================================ */
+        const CLANS = [
+            {
+                name: "Bakso",
+                tag: "[Bakso]",
+                logo: "bakso.png",
+                motto: "berteman dan saling tolong",
+                players: 4,
+                maxPlayers: 10,
+                status: "open",
+                waNumber: "6289647978937",
+                leaderName: "Exeller8668"
+            },
+            {
+                name: "Hytam",
+                tag: "[Hytam]",
+                logo: "https://placehold.co/112x112/2b0d10/e3ac3d?text=FTH",
+                motto: "saling bantu untuk survival ",
+                players: 4,
+                maxPlayers: 6,
+                status: "open",
+                waNumber: "62887437499669",
+                leaderName: "ryanyan9937"
+            },
+            {
+                name: "MusicFram",
+                tag: "[MusicFram]",
+                logo: "https://placehold.co/112x112/2b0d10/e3ac3d?text=ADP",
+                motto: "berbagi lagu itu indah",
+                players: 3,
+                maxPlayers: 10,
+                status: "open",
+                waNumber: "628213176273",
+                leaderName: "NebaaMC"
+            }
+        ];
+
+        function renderClans() {
+            const grid = document.getElementById('clan-grid');
+            grid.innerHTML = '';
+
+            CLANS.forEach((clan) => {
+                const isFull = clan.status === 'full';
+
+                const message =
+                    `Halo Kak ${clan.leaderName || ''}, saya mau tanya-tanya soal clan ${clan.name}. ` +
+                    `Boleh info lebih lanjut?`;
+
+                const waLink = `https://wa.me/${clan.waNumber}?text=${encodeURIComponent(message)}`;
+
+                const card = document.createElement('div');
+                card.className = 'clan-card reveal';
+
+                card.innerHTML = `
+                    <div class="clan-top">
+                        <img class="clan-logo" src="${clan.logo}" alt="Logo ${clan.name}">
+                        <div class="clan-name-wrap">
+                            <div class="clan-name">${clan.name}</div>
+                            <div class="clan-tag">${clan.tag}</div>
+                        </div>
+                    </div>
+
+                    <div class="clan-motto">"${clan.motto}"</div>
+
+                    <div class="clan-meta">
+                        <span class="clan-players">👥 ${clan.players}/${clan.maxPlayers} Player</span>
+                        <span class="status-badge ${isFull ? 'status-full' : 'status-open'}">
+                            <span class="sdot"></span>
+                            ${isFull ? 'Penuh' : 'Masih Buka'}
+                        </span>
+                    </div>
+
+                    <div class="clan-join">
+                        <a href="${waLink}" target="_blank" rel="noopener">
+                            ${isFull ? 'Chat Ketua Clan (Waiting List)' : 'Chat Ketua Clan →'}
+                        </a>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+        }
+
+        const emberContainer = document.getElementById('embers');
+        const TOTAL_EMBERS = 24;
+
+        for (let i = 0; i < TOTAL_EMBERS; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'ember-dot';
+            dot.style.left = Math.random() * 100 + '%';
+            dot.style.animationDelay = Math.random() * 14 + 's';
+            dot.style.animationDuration = (10 + Math.random() * 10) + 's';
+            emberContainer.appendChild(dot);
+        }
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+        renderClans();
+    </script>
+
+</body>
+
+</html>

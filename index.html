@@ -180,8 +180,102 @@
             box-shadow: 0 6px 18px rgba(255, 107, 53, .25);
         }
 
+        /* ---------------- Hamburger button (mobile only) ---------------- */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            background: rgba(227, 172, 61, .06);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 60;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            margin: 0 auto;
+            background: var(--gold-bright);
+            border-radius: 2px;
+            transition: transform .2s ease, opacity .2s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ---------------- Dropdown menu (mobile only) ---------------- */
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            z-index: 49;
+            display: flex;
+            flex-direction: column;
+            max-height: 0;
+            overflow: hidden;
+            background: rgba(18, 10, 12, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+            transition: max-height .3s ease;
+        }
+
+        .mobile-menu.open {
+            max-height: 420px;
+        }
+
+        .mobile-menu a {
+            padding: 16px 24px;
+            font-size: 1rem;
+            color: var(--cream);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .mobile-menu a.chat-admin-link {
+            margin: 10px 24px 18px;
+            padding: 13px;
+            text-align: center;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            background: rgba(227, 172, 61, .1);
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+
         @media (max-width: 760px) {
             .navlinks {
+                display: none;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 761px) {
+            .hamburger {
+                display: none;
+            }
+
+            .mobile-menu {
                 display: none;
             }
         }
@@ -769,6 +863,7 @@
             <div class="navlinks">
                 <a href="#rank">Rank</a>
                 <a href="#topup">Top Up</a>
+                <a href="clan.html">Clan</a>
                 <a href="#footer">Server Info</a>
             </div>
 
@@ -777,7 +872,24 @@
                 target="_blank" rel="noopener">
                 Chat Admin
             </a>
+
+            <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
         </nav>
+
+        <!-- Dropdown menu khusus mobile -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#rank" onclick="closeMobileMenu()">Rank</a>
+            <a href="#topup" onclick="closeMobileMenu()">Top Up</a>
+            <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
+            <a href="#footer" onclick="closeMobileMenu()">Server Info</a>
+            <a class="chat-admin-link"
+                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
+                target="_blank" rel="noopener">
+                Chat Admin
+            </a>
+        </div>
     </header>
 
     <main>
@@ -1156,6 +1268,24 @@
            jadi tetap cek satu-satu ya kalau nomor berubah.
         ---------------------------------------------------------- */
         const WA_NUMBER = "6285761779383";
+
+        /* ----------------------------------------------------------
+           Buka/tutup dropdown menu hamburger (khusus mobile).
+        ---------------------------------------------------------- */
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        // tutup menu otomatis kalau layar di-resize ke ukuran desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 760) closeMobileMenu();
+        });
 
         /* ----------------------------------------------------------
            Efek abu bara: bikin beberapa titik lalu kasih posisi

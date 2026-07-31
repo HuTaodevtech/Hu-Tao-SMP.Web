@@ -639,6 +639,7 @@
         }
 
         .topup-card {
+            position: relative;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -646,6 +647,7 @@
             border: 1px solid var(--line);
             border-radius: 12px;
             padding: 28px;
+            overflow: hidden;
         }
 
         .topup-icon {
@@ -675,6 +677,38 @@
         .topup-rate b {
             font-weight: 600;
             color: var(--gold-bright);
+        }
+
+        .topup-old {
+            text-decoration: line-through;
+            opacity: .55;
+            margin-right: 6px;
+        }
+
+        /* ---- Ribbon badge (DISKON / NAIK) di pojok kartu ---- */
+        .topup-badge {
+            position: absolute;
+            top: 16px;
+            right: -38px;
+            width: 150px;
+            transform: rotate(40deg);
+            text-align: center;
+            padding: 5px 0;
+            font-family: 'Silkscreen';
+            font-size: .62rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #1a0906;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .4);
+            z-index: 2;
+        }
+
+        .topup-badge.diskon {
+            background: linear-gradient(135deg, var(--ember), #c23b1f);
+        }
+
+        .topup-badge.naik {
+            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
         }
 
         /* stepper kuantitas (tombol - / angka / tombol +) */
@@ -1180,9 +1214,12 @@
 
                     <!-- Point -->
                     <div class="topup-card reveal">
+                        <span class="topup-badge naik">Naik Jumlah!</span>
                         <div class="topup-icon">✨</div>
                         <h3>Point</h3>
-                        <div class="topup-rate">20 Point = <b>Rp1.000</b></div>
+                        <div class="topup-rate">
+                            <span class="topup-old">20 Point</span>150 Point = <b>Rp1.000</b>
+                        </div>
                         <div class="stepper">
                             <button type="button" onclick="stepQty('point', -1)">−</button>
                             <input type="text" id="point-qty" value="1" readonly>
@@ -1195,15 +1232,18 @@
 
                     <!-- Skill -->
                     <div class="topup-card reveal">
+                        <span class="topup-badge diskon">Diskon!</span>
                         <div class="topup-icon">🔥</div>
                         <h3>Skill</h3>
-                        <div class="topup-rate">1 Skill = <b>Rp7.000</b></div>
+                        <div class="topup-rate">
+                            1 Skill = <span class="topup-old">Rp7.000</span><b>Rp5.000</b>
+                        </div>
                         <div class="stepper">
                             <button type="button" onclick="stepQty('skill', -1)">−</button>
                             <input type="text" id="skill-qty" value="1" readonly>
                             <button type="button" onclick="stepQty('skill', 1)">+</button>
                         </div>
-                        <div class="topup-total">Total: <span id="skill-total">Rp7.000</span></div>
+                        <div class="topup-total">Total: <span id="skill-total">Rp5.000</span></div>
                         <div class="buy"><a id="skill-link" href="#" target="_blank" rel="noopener">Pesan via
                                 WhatsApp</a></div>
                     </div>
@@ -1298,12 +1338,12 @@
         const topupRates = {
             money: 5000,
             point: 1000,
-            skill: 7000,
+            skill: 5000,
         };
 
         const topupLabels = {
             money: 'Rp100rb Money',
-            point: '20 Point',
+            point: '150 Point',
             skill: '1 Skill',
         };
 

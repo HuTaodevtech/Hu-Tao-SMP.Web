@@ -639,7 +639,6 @@
         }
 
         .topup-card {
-            position: relative;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -647,7 +646,6 @@
             border: 1px solid var(--line);
             border-radius: 12px;
             padding: 28px;
-            overflow: hidden;
         }
 
         .topup-icon {
@@ -677,38 +675,6 @@
         .topup-rate b {
             font-weight: 600;
             color: var(--gold-bright);
-        }
-
-        .topup-old {
-            text-decoration: line-through;
-            opacity: .55;
-            margin-right: 6px;
-        }
-
-        /* ---- Ribbon badge (DISKON / NAIK) di pojok kartu ---- */
-        .topup-badge {
-            position: absolute;
-            top: 16px;
-            right: -38px;
-            width: 150px;
-            transform: rotate(40deg);
-            text-align: center;
-            padding: 5px 0;
-            font-family: 'Silkscreen';
-            font-size: .62rem;
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            color: #1a0906;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .4);
-            z-index: 2;
-        }
-
-        .topup-badge.diskon {
-            background: linear-gradient(135deg, var(--ember), #c23b1f);
-        }
-
-        .topup-badge.naik {
-            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
         }
 
         /* stepper kuantitas (tombol - / angka / tombol +) */
@@ -856,6 +822,185 @@
                 animation: none;
             }
         }
+
+        /* ==========================================================
+       10. MODAL PILIH ADMIN
+       ========================================================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(9, 5, 6, 0.72);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 420px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 26px 24px 24px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
+            transform: translateY(14px);
+            transition: transform .2s ease;
+        }
+
+        .modal-overlay.open .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .modal-head h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        .modal-close {
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(227, 172, 61, .08);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--gold-bright);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .modal-context {
+            margin-top: 4px;
+            margin-bottom: 20px;
+            font-size: .88rem;
+            color: var(--cream);
+            opacity: .68;
+        }
+
+        .modal-label {
+            display: block;
+            margin: 18px 0 10px;
+            font-family: 'Silkscreen';
+            font-size: .66rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ember);
+        }
+
+        .admin-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .admin-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 8px;
+            background: rgba(227, 172, 61, .04);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--cream);
+            font-size: .82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .admin-option .admin-avatar {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--maroon-deep);
+            border: 1px solid var(--line);
+            font-family: 'Silkscreen';
+            font-size: .72rem;
+            color: var(--gold-bright);
+        }
+
+        .admin-option:hover {
+            border-color: var(--gold);
+        }
+
+        .admin-option.selected {
+            border-color: var(--gold);
+            background: rgba(227, 172, 61, .14);
+        }
+
+        .admin-option.selected .admin-avatar {
+            background: var(--gold);
+            color: #1a0906;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--maroon-deep);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--ghost);
+            font-family: 'Work Sans';
+            font-size: .92rem;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .modal-input::placeholder {
+            color: var(--cream);
+            opacity: .4;
+        }
+
+        .modal-submit {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--ember), #c23b1f);
+            color: #1a0906;
+            font-weight: 700;
+            font-size: .92rem;
+            cursor: pointer;
+        }
+
+        .modal-hint {
+            margin-top: 10px;
+            font-size: .74rem;
+            text-align: center;
+            color: var(--cream);
+            opacity: .5;
+        }
     </style>
 </head>
 
@@ -875,13 +1020,11 @@
             <div class="navlinks">
                 <a href="#rank">Rank</a>
                 <a href="#topup">Top Up</a>
-                <a href="clan.html">Clan</a>
+                <a href="daftar-clan.html">Clan</a>
                 <a href="#footer">Server Info</a>
             </div>
 
-            <a class="nav-cta"
-                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
-                target="_blank" rel="noopener">
+            <a class="nav-cta" href="javascript:void(0)" onclick="openChatModal()">
                 Chat Admin
             </a>
 
@@ -894,11 +1037,9 @@
         <div class="mobile-menu" id="mobileMenu">
             <a href="#rank" onclick="closeMobileMenu()">Rank</a>
             <a href="#topup" onclick="closeMobileMenu()">Top Up</a>
-            <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
+            <a href="daftar-clan.html" onclick="closeMobileMenu()">Clan</a>
             <a href="#footer" onclick="closeMobileMenu()">Server Info</a>
-            <a class="chat-admin-link"
-                href="https://wa.me/6285766564830?text=Halo%20Admin%20Hu%20Tao%20SMP%2C%20saya%20mau%20tanya-tanya%20soal%20server"
-                target="_blank" rel="noopener">
+            <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
                 Chat Admin
             </a>
         </div>
@@ -977,8 +1118,7 @@
                             <li>/enderchest</li>
                         </ul>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Yelan%20(Rp15.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('Yelan','Rp15.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1010,8 +1150,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur yelan</span>
                         </div>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Bennet%20(Rp35.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('Bennet','Rp35.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1043,8 +1182,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur Bennet</span>
                         </div>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20XingQiu%20(Rp65.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('XingQiu','Rp65.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1087,8 +1225,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur XingQiu</span>
                         </div>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20ZhongLi%20(Rp120.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('ZhongLi','Rp120.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1131,8 +1268,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur ZhongLi</span>
                         </div>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20XiangLing%20(Rp150.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('XiangLing','Rp150.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1173,8 +1309,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur XiangLing</span>
                         </div>
                         <div class="buy">
-                            <a href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20beli%20rank%20Hu%20Tao%20(Rp300.000)%20IGN%3A%20"
-                                target="_blank" rel="noopener">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal('Hu Tao','Rp300.000')">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -1208,44 +1343,35 @@
                             <button type="button" onclick="stepQty('money', 1)">+</button>
                         </div>
                         <div class="topup-total">Total: <span id="money-total">Rp5.000</span></div>
-                        <div class="buy"><a id="money-link" href="#" target="_blank" rel="noopener">Pesan via
-                                WhatsApp</a></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('money')">Pesan via WhatsApp</a></div>
                     </div>
 
                     <!-- Point -->
                     <div class="topup-card reveal">
-                        <span class="topup-badge naik">Naik Jumlah!</span>
                         <div class="topup-icon">✨</div>
                         <h3>Point</h3>
-                        <div class="topup-rate">
-                            <span class="topup-old">20 Point</span>150 Point = <b>Rp1.000</b>
-                        </div>
+                        <div class="topup-rate">20 Point = <b>Rp1.000</b></div>
                         <div class="stepper">
                             <button type="button" onclick="stepQty('point', -1)">−</button>
                             <input type="text" id="point-qty" value="1" readonly>
                             <button type="button" onclick="stepQty('point', 1)">+</button>
                         </div>
                         <div class="topup-total">Total: <span id="point-total">Rp1.000</span></div>
-                        <div class="buy"><a id="point-link" href="#" target="_blank" rel="noopener">Pesan via
-                                WhatsApp</a></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('point')">Pesan via WhatsApp</a></div>
                     </div>
 
                     <!-- Skill -->
                     <div class="topup-card reveal">
-                        <span class="topup-badge diskon">Diskon!</span>
                         <div class="topup-icon">🔥</div>
                         <h3>Skill</h3>
-                        <div class="topup-rate">
-                            1 Skill = <span class="topup-old">Rp7.000</span><b>Rp5.000</b>
-                        </div>
+                        <div class="topup-rate">1 Skill = <b>Rp7.000</b></div>
                         <div class="stepper">
                             <button type="button" onclick="stepQty('skill', -1)">−</button>
                             <input type="text" id="skill-qty" value="1" readonly>
                             <button type="button" onclick="stepQty('skill', 1)">+</button>
                         </div>
-                        <div class="topup-total">Total: <span id="skill-total">Rp5.000</span></div>
-                        <div class="buy"><a id="skill-link" href="#" target="_blank" rel="noopener">Pesan via
-                                WhatsApp</a></div>
+                        <div class="topup-total">Total: <span id="skill-total">Rp7.000</span></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('skill')">Pesan via WhatsApp</a></div>
                     </div>
 
                 </div>
@@ -1273,14 +1399,53 @@
         </div>
     </footer>
 
+    <!-- ============ MODAL: PILIH ADMIN ============ -->
+    <div class="modal-overlay" id="orderModal" onclick="if(event.target===this) closeModal()">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Pilih Admin</h3>
+                <div class="modal-close" onclick="closeModal()">✕</div>
+            </div>
+            <p class="modal-context" id="modalContext">—</p>
+
+            <span class="modal-label">Kirim pesan ke</span>
+            <div class="admin-options">
+                <div class="admin-option" data-admin="clay" onclick="selectAdmin('clay', this)">
+                    <span class="admin-avatar">C</span> Clay
+                </div>
+                <div class="admin-option" data-admin="winataa" onclick="selectAdmin('winataa', this)">
+                    <span class="admin-avatar">W</span> Winataa
+                </div>
+                <div class="admin-option" data-admin="pedal" onclick="selectAdmin('pedal', this)">
+                    <span class="admin-avatar">P</span> Pedal
+                </div>
+            </div>
+
+            <div id="modalIGNWrap">
+                <span class="modal-label">IGN Minecraft</span>
+                <input type="text" class="modal-input" id="modalIGN" placeholder="Contoh: HuTao_Ganyu">
+            </div>
+
+            <button class="modal-submit" onclick="submitOrder()">Kirim ke WhatsApp</button>
+            <p class="modal-hint">Kamu akan diarahkan ke WhatsApp admin yang dipilih.</p>
+        </div>
+    </div>
+
     <script>
 
         /* ----------------------------------------------------------
-           Nomor WhatsApp admin — ganti sekali di sini kalau perlu,
-           tapi tombol-tombol di HTML di atas masih pakai angka manual
-           jadi tetap cek satu-satu ya kalau nomor berubah.
+           Nomor WhatsApp admin — dipakai oleh modal pemilihan admin
+           di semua tombol beli rank, top up, dan chat admin.
         ---------------------------------------------------------- */
-        const WA_NUMBER = "6285761779383";
+        const ADMINS = {
+            clay: { name: 'Clay', number: '6285761779383' },
+            winataa: { name: 'Winataa', number: '6285766564830' },
+            pedal: { name: 'Pedal', number: '6289531905129' },
+        };
+
+        let selectedAdminKey = null;
+        let currentBaseMessage = '';
+        let currentNeedsIGN = true;
 
         /* ----------------------------------------------------------
            Buka/tutup dropdown menu hamburger (khusus mobile).
@@ -1338,12 +1503,12 @@
         const topupRates = {
             money: 5000,
             point: 1000,
-            skill: 5000,
+            skill: 7000,
         };
 
         const topupLabels = {
             money: 'Rp100rb Money',
-            point: '150 Point',
+            point: '20 Point',
             skill: '1 Skill',
         };
 
@@ -1363,13 +1528,6 @@
 
             document.getElementById(itemKey + '-qty').value = quantity;
             document.getElementById(itemKey + '-total').textContent = formatRupiah(total);
-
-            const message =
-                `Halo Admin, saya mau top up ${topupLabels[itemKey]} sebanyak ${quantity}x ` +
-                `(Total ${formatRupiah(total)}). IGN: `;
-
-            document.getElementById(itemKey + '-link').href =
-                `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
         }
 
         function stepQty(itemKey, delta) {
@@ -1381,6 +1539,79 @@
 
         // set nilai awal saat halaman pertama kali dimuat
         Object.keys(topupRates).forEach(updateTopupCard);
+
+        /* ----------------------------------------------------------
+           Modal pilih admin — dipakai untuk beli rank, top up,
+           dan chat admin umum. Setelah admin & (kalau perlu) IGN
+           diisi, pesan otomatis dibuka lewat wa.me nomor admin itu.
+        ---------------------------------------------------------- */
+        function openModal(contextText, baseMessage, needsIGN) {
+            document.getElementById('modalContext').textContent = contextText;
+            currentBaseMessage = baseMessage;
+            currentNeedsIGN = needsIGN;
+
+            selectedAdminKey = null;
+            document.querySelectorAll('.admin-option').forEach((el) => el.classList.remove('selected'));
+            document.getElementById('modalIGN').value = '';
+            document.getElementById('modalIGNWrap').style.display = needsIGN ? 'block' : 'none';
+
+            document.getElementById('orderModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('open');
+        }
+
+        function selectAdmin(key, el) {
+            selectedAdminKey = key;
+            document.querySelectorAll('.admin-option').forEach((opt) => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function submitOrder() {
+            if (!selectedAdminKey) {
+                alert('Pilih admin dulu ya, kak!');
+                return;
+            }
+
+            let ign = '';
+            if (currentNeedsIGN) {
+                ign = document.getElementById('modalIGN').value.trim();
+                if (!ign) {
+                    alert('Isi IGN Minecraft dulu ya, kak!');
+                    return;
+                }
+            }
+
+            const admin = ADMINS[selectedAdminKey];
+            let message = currentBaseMessage.replace('{ADMIN}', admin.name);
+            if (currentNeedsIGN) {
+                message += ` IGN: ${ign}`;
+            }
+
+            window.open(`https://wa.me/${admin.number}?text=${encodeURIComponent(message)}`, '_blank');
+            closeModal();
+        }
+
+        function openRankModal(rankName, price) {
+            const contextText = `${rankName} — ${price}`;
+            const baseMessage = `Halo Admin {ADMIN}, saya mau beli rank ${rankName} (${price}).`;
+            openModal(contextText, baseMessage, true);
+        }
+
+        function openTopupModal(itemKey) {
+            const quantity = topupQty[itemKey];
+            const total = formatRupiah(quantity * topupRates[itemKey]);
+            const contextText = `Top Up ${topupLabels[itemKey]} x${quantity} — Total ${total}`;
+            const baseMessage = `Halo Admin {ADMIN}, saya mau top up ${topupLabels[itemKey]} sebanyak ${quantity}x (Total ${total}).`;
+            openModal(contextText, baseMessage, true);
+        }
+
+        function openChatModal() {
+            const contextText = 'Tanya-tanya seputar Hu Tao SMP';
+            const baseMessage = `Halo Admin {ADMIN}, saya mau tanya-tanya soal server Hu Tao SMP.`;
+            openModal(contextText, baseMessage, false);
+        }
 
         /* ----------------------------------------------------------
            Salin IP server ke clipboard saat kotak IP diklik.

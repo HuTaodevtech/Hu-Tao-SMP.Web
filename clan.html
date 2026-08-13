@@ -214,6 +214,23 @@
         .register-cta h3 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; color: var(--gold-bright); }
         .register-cta p { max-width: 460px; color: var(--cream); opacity: .75; line-height: 1.6; font-size: .95rem; }
 
+        .register-cta .req-list {
+            max-width: 460px; text-align: left; margin: 4px 0 6px; padding: 16px 20px;
+            background: rgba(227, 172, 61, .05); border: 1px solid var(--line); border-radius: 10px;
+        }
+
+        .register-cta .req-list p { margin: 0 0 8px; opacity: 1; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); }
+
+        .register-cta .req-list ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+        .register-cta .req-list li {
+            font-size: .88rem; color: var(--cream); opacity: .85; line-height: 1.5; padding-left: 18px; position: relative;
+        }
+
+        .register-cta .req-list li::before {
+            content: "•"; position: absolute; left: 2px; color: var(--ember);
+        }
+
         .btn-cta {
             display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 8px;
             font-weight: 700; font-size: .95rem; background: linear-gradient(135deg, var(--ember), #c23b1f);
@@ -302,8 +319,23 @@
                         Mau clan kamu muncul di halaman ini lengkap dengan logo, jumlah player, dan status
                         open/penuh? Chat langsung ke admin, nanti dibantu setup.
                     </p>
+
+                    <div class="req-list">
+                        <p>Siapin data berikut sebelum chat admin:</p>
+                        <ul>
+                            <li>Nama Clan</li>
+                            <li>Tag Clan (contoh: [Bakso])</li>
+                            <li>Nama Ketua Clan (username in-game)</li>
+                            <li>Nomor WhatsApp Ketua Clan (aktif)</li>
+                            <li>Motto / Slogan Clan</li>
+                            <li>Jumlah Player Saat Ini & Max Player</li>
+                            <li>Logo Clan (file gambar, min. 112x112px)</li>
+                            <li>Status Pendaftaran (Masih Buka / Penuh)</li>
+                        </ul>
+                    </div>
+
                     <a class="btn-cta"
-                        href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20daftarin%20clan%20saya%20di%20web%20Hu%20Tao%20SMP.%20Nama%20Clan%3A%20"
+                        href="https://wa.me/6285761779383?text=Halo%20Admin%2C%20saya%20mau%20daftarin%20clan%20saya%20di%20web%20Hu%20Tao%20SMP.%0A%0ANama%20Clan%3A%20%0ATag%20Clan%3A%20%0ANama%20Ketua%20Clan%3A%20%0ANomor%20WhatsApp%20Ketua%3A%20%0AMotto%2FSlogan%20Clan%3A%20%0AJumlah%20Player%20Saat%20Ini%3A%20%0AMax%20Player%3A%20%0ALogo%20Clan%3A%20(lampirkan%20gambar)%0AStatus%20(Masih%20Buka%2FPenuh)%3A%20"
                         target="_blank" rel="noopener">
                         Daftar Clan di Web →
                     </a>
@@ -334,22 +366,6 @@
             if (window.innerWidth > 760) closeMobileMenu();
         });
 
-        /* ============================================================
-           DATA CLAN — EDIT DI SINI AJA
-           ------------------------------------------------------------
-           name        : nama clan
-           tag         : kode/tag singkat clan (contoh: [WGS])
-           logo        : path/url ke gambar logo clan (persegi lebih bagus).
-                         Bisa pakai FILE LOKAL, contoh: "bakso.png"
-                         (taruh file gambarnya SATU FOLDER dengan file HTML ini)
-                         ATAU pakai LINK URL gambar, contoh: https://...
-           motto       : kata-kata / motto clan
-           players     : jumlah player sekarang
-           maxPlayers  : kapasitas maksimal clan
-           status      : "open" (masih buka) atau "full" (penuh)
-           waNumber    : nomor WA ketua clan, format 62xxxxxxxxxx (tanpa +, tanpa 0 di depan)
-           leaderName  : nama ketua clan (opsional, buat teks pesan WA)
-        ============================================================ */
         const CLANS = [
             {
                 name: "Bakso",
@@ -401,7 +417,7 @@
                 name: "ZECYANO",
                 tag: "[ZYC]",
                 logo: "ZECYANO.jpg",
-                motto: "Tidak pandang bulub",
+                motto: "Tidak pandang bulu",
                 players: 2,
                 maxPlayers: 10,
                 status: "open",

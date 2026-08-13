@@ -31,6 +31,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
 
+        ::selection { background: var(--gold); color: #1a0906; }
+
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 2px; width: 0%; z-index: 100;
+            background: linear-gradient(90deg, var(--ember), var(--gold-bright));
+            box-shadow: 0 0 10px rgba(255, 107, 53, .6);
+            transition: width .08s linear;
+        }
+
         body {
             background:
                 radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 107, 53, 0.10), transparent),
@@ -120,20 +129,52 @@
 
         .hero { position: relative; z-index: 1; padding: 64px 0 20px; text-align: center; }
 
+        @keyframes hero-in {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-anim { opacity: 0; animation: hero-in .7s cubic-bezier(.16, 1, .3, 1) forwards; }
+        .hero-anim.d1 { animation-delay: .05s; }
+        .hero-anim.d2 { animation-delay: .18s; }
+        .hero-anim.d3 { animation-delay: .34s; }
+
         .eyebrow {
             display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px; margin-bottom: 22px;
             border: 1px solid var(--line); border-radius: 999px; font-size: .72rem; letter-spacing: .18em;
             text-transform: uppercase; color: var(--gold);
         }
 
-        .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px var(--ember); }
+        .eyebrow .dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px var(--ember);
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.3); }
+        }
 
         h1.title {
-            font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 700; line-height: 1.05; color: var(--gold-bright);
+            font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 700; line-height: 1.05;
+            background: linear-gradient(100deg, var(--gold-bright) 30%, var(--ember) 50%, var(--gold-bright) 70%);
+            background-size: 220% auto;
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--gold-bright);
             text-shadow: 0 2px 30px rgba(227, 172, 61, .25);
+            animation: hero-in .7s cubic-bezier(.16, 1, .3, 1) .18s forwards, shine 6s linear infinite 1s;
+            opacity: 0;
+        }
+
+        @keyframes shine {
+            to { background-position: -220% center; }
         }
 
         .hero p.sub { max-width: 560px; margin: 20px auto 0; color: var(--cream); opacity: .78; font-size: 1.02rem; line-height: 1.6; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-anim, h1.title { animation: none !important; opacity: 1 !important; }
+            .eyebrow .dot { animation: none; }
+        }
 
         .section { position: relative; z-index: 1; padding: 60px 0 90px; }
         .section-head { max-width: 640px; margin: 0 auto 48px; text-align: center; }
@@ -152,18 +193,36 @@
         @media (max-width: 620px) { .clans-grid { grid-template-columns: 1fr; } }
 
         .clan-card {
-            display: flex; flex-direction: column; gap: 14px; background: var(--panel); border: 1px solid var(--line);
-            border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
-            transition: transform .15s ease, border-color .15s ease;
+            position: relative; display: flex; flex-direction: column; gap: 14px; background: var(--panel);
+            border: 1px solid var(--line); border-radius: 12px; padding: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .25s ease, box-shadow .35s ease;
+            transform-style: preserve-3d; will-change: transform; overflow: hidden;
         }
 
-        .clan-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+        .clan-card::before {
+            content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0; pointer-events: none;
+            background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(227, 172, 61, .14), transparent 70%);
+            transition: opacity .3s ease;
+        }
+
+        .clan-card:hover::before { opacity: 1; }
+
+        .clan-card > * { position: relative; z-index: 1; }
+
+        .clan-card:hover {
+            transform: translateY(-6px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
+            border-color: var(--gold);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, .45), 0 0 0 1px rgba(227, 172, 61, .15);
+        }
+
         .clan-top { display: flex; align-items: center; gap: 14px; }
 
         .clan-logo {
             width: 56px; height: 56px; flex-shrink: 0; border-radius: 10px; border: 1.5px solid var(--gold);
-            object-fit: cover; background: var(--maroon-deep);
+            object-fit: cover; background: var(--maroon-deep); transition: transform .35s cubic-bezier(.16, 1, .3, 1);
         }
+
+        .clan-card:hover .clan-logo { transform: scale(1.08) rotate(-2deg); }
 
         .clan-name-wrap { min-width: 0; }
 
@@ -190,7 +249,7 @@
         .status-badge .sdot { width: 6px; height: 6px; border-radius: 50%; }
 
         .status-open { background: rgba(111, 191, 115, .12); color: var(--green); border: 1px solid rgba(111, 191, 115, .35); }
-        .status-open .sdot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .status-open .sdot { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse-dot 1.8s ease-in-out infinite; }
 
         .status-full { background: rgba(227, 89, 61, .12); color: var(--red); border: 1px solid rgba(227, 89, 61, .35); }
         .status-full .sdot { background: var(--red); box-shadow: 0 0 6px var(--red); }
@@ -198,11 +257,19 @@
         .clan-join { margin-top: auto; padding-top: 6px; }
 
         .clan-join a {
-            display: block; text-align: center; padding: 11px; border-radius: 6px; background: rgba(227, 172, 61, .1);
-            border: 1px solid var(--gold); color: var(--gold-bright); font-weight: 600; font-size: .85rem; transition: .15s;
+            position: relative; display: block; text-align: center; padding: 11px; border-radius: 6px;
+            background: rgba(227, 172, 61, .1); border: 1px solid var(--gold); color: var(--gold-bright);
+            font-weight: 600; font-size: .85rem; overflow: hidden; transition: color .25s ease, transform .2s ease;
         }
 
-        .clan-join a:hover { background: var(--gold); color: #1a0906; }
+        .clan-join a::before {
+            content: ""; position: absolute; inset: 0; background: var(--gold); transform: scaleX(0);
+            transform-origin: left; transition: transform .3s cubic-bezier(.16, 1, .3, 1); z-index: -1;
+        }
+
+        .clan-join a:hover { color: #1a0906; transform: translateY(-1px); }
+        .clan-join a:hover::before { transform: scaleX(1); }
+        .clan-join a:active { transform: translateY(0) scale(.98); }
 
         .clan-join a.disabled { opacity: .45; pointer-events: none; border-color: var(--line); color: var(--cream); }
 
@@ -232,18 +299,41 @@
         }
 
         .btn-cta {
-            display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 8px;
+            position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 8px;
             font-weight: 700; font-size: .95rem; background: linear-gradient(135deg, var(--ember), #c23b1f);
-            color: #1a0906; box-shadow: 0 10px 30px rgba(255, 107, 53, .3); transition: transform .15s ease;
+            color: #1a0906; box-shadow: 0 10px 30px rgba(255, 107, 53, .3);
+            transition: transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .25s ease;
+            overflow: hidden; isolation: isolate;
         }
 
-        .btn-cta:hover { transform: translateY(-2px); }
+        .btn-cta::after {
+            content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .35), transparent);
+            transform: skewX(-20deg);
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 38px rgba(255, 107, 53, .42);
+        }
+
+        .btn-cta:hover::after { animation: sweep .85s ease forwards; }
+        .btn-cta:active { transform: translateY(-1px) scale(.99); }
+
+        @keyframes sweep {
+            to { left: 130%; }
+        }
 
         footer { position: relative; z-index: 1; padding: 40px 0 30px; text-align: center; border-top: 1px solid var(--line); }
         footer p { font-size: .82rem; opacity: .55; }
 
-        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
-        .reveal.in { opacity: 1; transform: translateY(0); }
+        .reveal {
+            opacity: 0; transform: translateY(26px) scale(.98);
+            transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
+            transition-delay: var(--reveal-delay, 0s);
+        }
+
+        .reveal.in { opacity: 1; transform: translateY(0) scale(1); }
 
         @media (prefers-reduced-motion: reduce) {
             .reveal { opacity: 1; transform: none; transition: none; }
@@ -254,6 +344,7 @@
 
 <body>
 
+    <div class="scroll-progress" id="scrollProgress"></div>
     <div class="embers" id="embers"></div>
 
     <header>
@@ -294,9 +385,9 @@
 
     <main>
         <section class="hero wrap">
-            <span class="eyebrow"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
+            <span class="eyebrow hero-anim d1"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
             <h1 class="title">Daftar Clan</h1>
-            <p class="sub">
+            <p class="sub hero-anim d3">
                 Cari clan yang cocok buat kamu, atau lihat siapa aja yang udah eksis di Hu Tao SMP.
                 Klik "Chat Ketua Clan" buat langsung ngobrol via WhatsApp.
             </p>
@@ -352,6 +443,19 @@
     </footer>
 
     <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const scrollProgress = document.getElementById('scrollProgress');
+        function updateScrollProgress() {
+            const h = document.documentElement;
+            const scrolled = h.scrollTop;
+            const max = h.scrollHeight - h.clientHeight;
+            const pct = max > 0 ? (scrolled / max) * 100 : 0;
+            scrollProgress.style.width = pct + '%';
+        }
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        updateScrollProgress();
+
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('open');
             document.getElementById('hamburgerBtn').classList.toggle('active');
@@ -381,10 +485,10 @@
             {
                 name: "Hytam",
                 tag: "[Hytam]",
-                logo: "https://placehold.co/112x112/2b0d10/e3ac3d?text=FTH",
+                logo: "https://placehold.co/112x112/2b0d10/e3ac3d?text=HTM",
                 motto: "saling bantu untuk survival ",
-                players: 4,
-                maxPlayers: 6,
+                players: 15,
+                maxPlayers: 20,
                 status: "open",
                 waNumber: "62887437499669",
                 leaderName: "ryanyan9937"
@@ -418,7 +522,7 @@
                 tag: "[ZYC]",
                 logo: "ZECYANO.jpg",
                 motto: "Tidak pandang bulu",
-                players: 2,
+                players: 5,
                 maxPlayers: 10,
                 status: "open",
                 waNumber: "6285775115501",
@@ -436,13 +540,37 @@
                 waNumber: "6281340357695",
                 leaderName: "Takataou(leo/veyy)"
             },
+
+            {
+                name: "BLACKY",
+                tag: "[BLACK]",
+                logo: "Blacky.jpg",
+                motto: "Janji Sumpah Setia",
+                players: 1,
+                maxPlayers: 10,
+                status: "open",
+                waNumber: "62881036490669",
+                leaderName: "KAP6143"
+            },
+
+            {
+                name: "The void",
+                tag: "[Void]",
+                logo: "void.png",
+                motto: "ad player di depan langsung kill",
+                players: 3,
+                maxPlayers: 10,
+                status: "open",
+                waNumber: "6287858917501",
+                leaderName: "SWATTDPS"
+            },
         ];
 
         function renderClans() {
             const grid = document.getElementById('clan-grid');
             grid.innerHTML = '';
 
-            CLANS.forEach((clan) => {
+            CLANS.forEach((clan, idx) => {
                 const isFull = clan.status === 'full';
 
                 const message =
@@ -453,6 +581,7 @@
 
                 const card = document.createElement('div');
                 card.className = 'clan-card reveal';
+                card.style.setProperty('--reveal-delay', (idx % 3) * 0.08 + 's');
 
                 card.innerHTML = `
                     <div class="clan-top">
@@ -479,6 +608,22 @@
                         </a>
                     </div>
                 `;
+
+                if (!prefersReducedMotion) {
+                    card.addEventListener('pointermove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const px = (e.clientX - rect.left) / rect.width;
+                        const py = (e.clientY - rect.top) / rect.height;
+                        card.style.setProperty('--mx', (px * 100) + '%');
+                        card.style.setProperty('--my', (py * 100) + '%');
+                        card.style.setProperty('--rx', ((px - 0.5) * 6) + 'deg');
+                        card.style.setProperty('--ry', ((0.5 - py) * 6) + 'deg');
+                    });
+                    card.addEventListener('pointerleave', () => {
+                        card.style.setProperty('--rx', '0deg');
+                        card.style.setProperty('--ry', '0deg');
+                    });
+                }
 
                 grid.appendChild(card);
             });

@@ -28,6 +28,8 @@
             --cream: #f2e6d3;
             --ghost: #f5f0e8;
             --line: rgba(227, 172, 61, 0.28);
+            --green: #52d97f;
+            --red: #e35d5d;
         }
 
         * {
@@ -38,6 +40,11 @@
 
         html {
             scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: #1a0906;
         }
 
         body {
@@ -75,9 +82,24 @@
             padding: 0 24px;
         }
 
+        /* ==========================================================
+       2. PROGRESS BAR SCROLL (efek ala portfolio)
+       ========================================================== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            z-index: 100;
+            background: linear-gradient(90deg, var(--ember), var(--gold-bright));
+            box-shadow: 0 0 10px rgba(255, 107, 53, .6);
+            transition: width .08s linear;
+        }
+
 
         /* ==========================================================
-       2. EFEK ABU BARA TERBANG (background dekoratif)
+       3. EFEK ABU BARA TERBANG (background dekoratif)
        ========================================================== */
         .embers {
             position: fixed;
@@ -119,9 +141,23 @@
             }
         }
 
+        @keyframes pulseDot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .5;
+                transform: scale(1.25);
+            }
+        }
+
 
         /* ==========================================================
-       3. NAVBAR
+       4. NAVBAR
        ========================================================== */
         header {
             position: sticky;
@@ -148,6 +184,11 @@
             font-size: 1.15rem;
             letter-spacing: .02em;
             color: var(--gold-bright);
+            transition: opacity .2s ease;
+        }
+
+        .brand:hover {
+            opacity: .82;
         }
 
         .brand img {
@@ -165,11 +206,31 @@
             opacity: .85;
         }
 
+        .navlinks a {
+            position: relative;
+        }
+
+        .navlinks a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 1px;
+            background: var(--gold-bright);
+            transition: width .25s ease;
+        }
+
         .navlinks a:hover {
             color: var(--gold-bright);
         }
 
+        .navlinks a:hover::after {
+            width: 100%;
+        }
+
         .nav-cta {
+            position: relative;
             background: linear-gradient(135deg, var(--ember), #c23b1f);
             color: #1a0906;
             font-weight: 700;
@@ -178,6 +239,36 @@
             padding: 10px 20px;
             border-radius: 6px;
             box-shadow: 0 6px 18px rgba(255, 107, 53, .25);
+            overflow: hidden;
+            isolation: isolate;
+            transition: transform .2s cubic-bezier(.16, 1, .3, 1), box-shadow .2s ease;
+        }
+
+        .nav-cta::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .35), transparent);
+            transform: skewX(-20deg);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(255, 107, 53, .35);
+        }
+
+        .nav-cta:hover::after {
+            animation: sweep .85s ease forwards;
+        }
+
+        @keyframes sweep {
+            to {
+                left: 130%;
+            }
         }
 
         /* ---------------- Hamburger button (mobile only) ---------------- */
@@ -282,7 +373,7 @@
 
 
         /* ==========================================================
-       4. HERO
+       5. HERO
        ========================================================== */
         .hero {
             position: relative;
@@ -299,6 +390,14 @@
             border-radius: 14px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
+        }
+
+        .banner-frame img {
+            transition: transform .6s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .banner-frame:hover img {
+            transform: scale(1.03);
         }
 
         .eyebrow {
@@ -321,14 +420,27 @@
             border-radius: 50%;
             background: var(--ember);
             box-shadow: 0 0 8px var(--ember);
+            animation: pulseDot 1.8s ease-in-out infinite;
         }
 
         h1.title {
             font-size: clamp(2.6rem, 7vw, 4.6rem);
             font-weight: 700;
             line-height: 1.02;
+            background: linear-gradient(100deg, var(--gold-bright) 30%, var(--ember) 50%, var(--gold-bright) 70%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             color: var(--gold-bright);
             text-shadow: 0 2px 30px rgba(227, 172, 61, .25);
+            animation: shine 6s linear infinite 1.4s;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: -220% center;
+            }
         }
 
         h1.title em {
@@ -339,6 +451,7 @@
             font-size: .42em;
             letter-spacing: .04em;
             color: var(--cream);
+            -webkit-text-fill-color: var(--cream);
         }
 
         .hero p.sub {
@@ -358,6 +471,7 @@
         }
 
         .btn {
+            position: relative;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -365,23 +479,54 @@
             border-radius: 8px;
             font-weight: 600;
             font-size: .95rem;
-            transition: transform .15s ease, box-shadow .15s ease;
+            transition: transform .25s cubic-bezier(.16, 1, .3, 1), box-shadow .25s ease;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(.98);
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--ember), #c23b1f);
             color: #1a0906;
             box-shadow: 0 10px 30px rgba(255, 107, 53, .3);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent);
+            transform: skewX(-20deg);
+        }
+
+        .btn-primary:hover::after {
+            animation: sweep .85s ease forwards;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 14px 36px rgba(255, 107, 53, .42);
         }
 
         .btn-ghost {
             background: rgba(227, 172, 61, .06);
             border: 1px solid var(--line);
             color: var(--gold-bright);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(227, 172, 61, .12);
+            border-color: var(--gold);
         }
 
         .pillrow {
@@ -401,345 +546,64 @@
             text-transform: uppercase;
             color: var(--cream);
             opacity: .85;
+            transition: border-color .2s ease, color .2s ease, transform .2s ease;
         }
 
-
-        /* ==========================================================
-       5. JUDUL SEKSI (dipakai berulang di tiap section)
-       ========================================================== */
-        .section {
-            position: relative;
-            z-index: 1;
-            padding: 90px 0;
-        }
-
-        .section-head {
-            max-width: 640px;
-            margin: 0 auto 56px;
-            text-align: center;
-        }
-
-        .section-head .kicker {
-            display: block;
-            margin-bottom: 14px;
-            font-family: 'Silkscreen';
-            font-size: .68rem;
-            letter-spacing: .22em;
-            text-transform: uppercase;
-            color: var(--ember);
-        }
-
-        .section-head h2 {
-            font-family: 'Fraunces', serif;
-            font-size: clamp(1.9rem, 4vw, 2.7rem);
-            font-weight: 600;
-            color: var(--gold-bright);
-        }
-
-        .section-head p {
-            margin-top: 14px;
-            color: var(--cream);
-            opacity: .72;
-            line-height: 1.6;
-        }
-
-        .divider {
-            width: 1px;
-            height: 56px;
-            margin: 0 auto;
-            background: linear-gradient(var(--gold), transparent);
-        }
-
-
-        /* ==========================================================
-       6. KARTU RANK — GAYA "TIKET WANGSHENG"
-       ========================================================== */
-        .ranks-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-        }
-
-        @media (max-width: 900px) {
-            .ranks-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .ranks-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .ticket {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 4px;
-            padding: 26px 24px 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
-        }
-
-        /* lubang "sobekan tiket" di kiri-kanan kartu */
-        .ticket::before,
-        .ticket::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 20px;
-            height: 20px;
-            background: var(--bg);
-            border-radius: 50%;
-            transform: translateY(-50%);
-        }
-
-        .ticket::before {
-            left: -10px;
-        }
-
-        .ticket::after {
-            right: -10px;
-        }
-
-        .ticket .perf {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 96px;
-            border-top: 1px dashed var(--line);
-        }
-
-        .ticket-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
-
-        .ticket-no {
-            font-family: 'Silkscreen';
-            font-size: .68rem;
-            letter-spacing: .1em;
-            color: var(--ember);
-        }
-
-        .ticket-seal {
-            flex-shrink: 0;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid var(--gold);
-            border-radius: 50%;
-            font-family: 'Silkscreen';
-            font-size: .62rem;
-            line-height: 1.1;
-            text-align: center;
-            color: var(--gold-bright);
-        }
-
-        .ticket h3 {
-            margin-top: 10px;
-            font-family: 'Fraunces', serif;
-            font-size: 1.36rem;
-            font-weight: 600;
-            color: var(--gold-bright);
-        }
-
-        .ticket .price {
-            margin-top: 2px;
-            font-family: 'Fraunces', serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--cream);
-        }
-
-        .ticket .price small {
-            font-family: 'Work Sans';
-            font-size: .55em;
-            font-weight: 400;
-            opacity: .6;
-        }
-
-        .ticket ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .ticket ul li {
-            position: relative;
-            padding-left: 18px;
-            font-size: .86rem;
-            opacity: .82;
-        }
-
-        .ticket ul li::before {
-            content: "—";
-            position: absolute;
-            left: 0;
-            color: var(--ember);
-        }
-
-        .ticket .buy {
-            margin-top: auto;
-            padding-top: 16px;
-        }
-
-        .ticket .buy a {
-            display: block;
-            text-align: center;
-            padding: 11px;
-            border-radius: 6px;
-            background: rgba(227, 172, 61, .1);
-            border: 1px solid var(--gold);
-            color: var(--gold-bright);
-            font-weight: 600;
-            font-size: .85rem;
-            transition: .15s;
-        }
-
-        .ticket .buy a:hover {
-            background: var(--gold);
-            color: #1a0906;
-        }
-
-        /* kartu rank paling atas dibuat sedikit menonjol */
-        .ticket.top {
+        .pill:hover {
             border-color: var(--gold);
+            color: var(--gold-bright);
+            transform: translateY(-2px);
         }
 
-        .ticket.top .ticket-seal {
-            background: var(--gold);
-            color: #1a0906;
-        }
+        /* -------- animasi masuk hero (cascade saat load halaman) -------- */
+        @keyframes heroIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-
-        /* ==========================================================
-       7. TOP UP (Money / Point / Skill)
-       ========================================================== */
-        .topup-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-        }
-
-        @media (max-width: 860px) {
-            .topup-grid {
-                grid-template-columns: 1fr;
-                max-width: 420px;
-                margin: 0 auto;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .topup-card {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 28px;
+        .hero-anim {
+            opacity: 0;
+            animation: heroIn .75s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
-        .topup-icon {
-            width: 46px;
-            height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            font-size: 1.3rem;
+        .hero-anim.d1 {
+            animation-delay: .05s;
         }
 
-        .topup-card h3 {
-            font-family: 'Fraunces';
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gold-bright);
+        .hero-anim.d2 {
+            animation-delay: .16s;
         }
 
-        .topup-rate {
-            font-size: .85rem;
-            opacity: .72;
+        .hero-anim.d3 {
+            animation-delay: .30s;
         }
 
-        .topup-rate b {
-            font-weight: 600;
-            color: var(--gold-bright);
+        .hero-anim.d4 {
+            animation-delay: .44s;
         }
 
-        /* stepper kuantitas (tombol - / angka / tombol +) */
-        .stepper {
-            display: flex;
-            align-items: center;
-            margin-top: 4px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            overflow: hidden;
+        .hero-anim.d5 {
+            animation-delay: .58s;
         }
 
-        .stepper button {
-            width: 38px;
-            height: 40px;
-            background: var(--maroon-deep);
-            color: var(--gold-bright);
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
+        .hero-anim.d6 {
+            animation-delay: .70s;
         }
 
-        .stepper button:hover {
-            background: var(--maroon);
-        }
-
-        .stepper input {
-            width: 100%;
-            text-align: center;
-            background: transparent;
-            border: none;
-            color: var(--cream);
-            font-family: 'Silkscreen';
-            font-size: .95rem;
-        }
-
-        .stepper input:focus {
-            outline: none;
-        }
-
-        .topup-total {
-            font-family: 'Fraunces';
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--cream);
-        }
-
-        .topup-total span {
-            color: var(--gold-bright);
-        }
-
-        .topup-card .buy a {
-            display: block;
-            text-align: center;
-            padding: 12px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, var(--ember), #c23b1f);
-            color: #1a0906;
-            font-weight: 700;
-            font-size: .85rem;
+        h1.title.hero-anim {
+            animation: heroIn .75s cubic-bezier(.16, 1, .3, 1) .30s forwards, shine 6s linear infinite 1.4s;
         }
 
 
         /* ==========================================================
-       8. FOOTER
+       6. FOOTER
        ========================================================== */
         footer {
             position: relative;
@@ -749,11 +613,40 @@
             border-top: 1px solid var(--line);
         }
 
+        .ip-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ip-group-label {
+            font-size: .68rem;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--ember);
+            font-family: 'Silkscreen';
+        }
+
+        .ip-groups {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .ip-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
         .ip-box {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 22px;
             padding: 12px 20px;
             background: var(--panel);
             border: 1px solid var(--line);
@@ -762,6 +655,12 @@
             font-size: .95rem;
             color: var(--gold-bright);
             cursor: pointer;
+            transition: border-color .2s ease, transform .2s ease;
+        }
+
+        .ip-box:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
         }
 
         .ip-box small {
@@ -782,6 +681,7 @@
 
         .foot-links a {
             opacity: .75;
+            transition: opacity .2s ease, color .2s ease;
         }
 
         .foot-links a:hover {
@@ -797,34 +697,41 @@
 
 
         /* ==========================================================
-       9. ANIMASI MUNCUL SAAT SCROLL + AKSESIBILITAS
+       7. ANIMASI MUNCUL SAAT SCROLL + AKSESIBILITAS
        ========================================================== */
         .reveal {
             opacity: 0;
-            transform: translateY(22px);
-            transition: opacity .6s ease, transform .6s ease;
+            transform: translateY(24px) scale(.98);
+            transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
         }
 
         .reveal.in {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .reveal {
-                opacity: 1;
-                transform: none;
-                transition: none;
+
+            .reveal,
+            .hero-anim,
+            h1.title {
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
             }
 
             .ember-dot {
                 display: none;
                 animation: none;
             }
+
+            .eyebrow .dot {
+                animation: none;
+            }
         }
 
         /* ==========================================================
-       10. STATUS SERVER (LIVE, VIA API — TANPA DATABASE)
+       8. STATUS SERVER (LIVE, VIA API — TANPA DATABASE)
        ========================================================== */
         .status-card {
             max-width: 460px;
@@ -838,6 +745,11 @@
             border: 1px solid var(--line);
             border-radius: 999px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+            transition: border-color .2s ease;
+        }
+
+        .status-card:hover {
+            border-color: var(--gold);
         }
 
         .status-left {
@@ -857,26 +769,14 @@
         }
 
         .status-dot.online {
-            background: #52d97f;
-            box-shadow: 0 0 8px #52d97f;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
             animation: pulseDot 1.8s ease-in-out infinite;
         }
 
         .status-dot.offline {
-            background: #e35d5d;
-            box-shadow: 0 0 8px #e35d5d;
-        }
-
-        @keyframes pulseDot {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .45;
-            }
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red);
         }
 
         .status-right {
@@ -904,7 +804,7 @@
 
 
         /* ==========================================================
-       11. MODAL PILIH ADMIN
+       9. MODAL PILIH ADMIN
        ========================================================== */
         .modal-overlay {
             position: fixed;
@@ -970,6 +870,12 @@
             color: var(--gold-bright);
             font-size: 1rem;
             cursor: pointer;
+            transition: transform .15s ease, border-color .15s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            border-color: var(--gold);
         }
 
         .modal-context {
@@ -1028,6 +934,7 @@
 
         .admin-option:hover {
             border-color: var(--gold);
+            transform: translateY(-2px);
         }
 
         .admin-option.selected {
@@ -1062,6 +969,7 @@
         }
 
         .modal-submit {
+            position: relative;
             width: 100%;
             margin-top: 22px;
             padding: 13px;
@@ -1072,6 +980,29 @@
             font-weight: 700;
             font-size: .92rem;
             cursor: pointer;
+            overflow: hidden;
+            isolation: isolate;
+            transition: transform .2s ease;
+        }
+
+        .modal-submit::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent);
+            transform: skewX(-20deg);
+        }
+
+        .modal-submit:hover::after {
+            animation: sweep .85s ease forwards;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
         }
 
         .modal-hint {
@@ -1086,20 +1017,23 @@
 
 <body>
 
+    <!-- Progress bar scroll di paling atas -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <!-- Titik-titik abu bara mengambang, dibuat lewat JS di bagian bawah -->
     <div class="embers" id="embers"></div>
 
     <!-- ============ NAVBAR ============ -->
     <header>
         <nav class="wrap">
-            <div class="brand">
+            <a class="brand" href="index.html">
                 <img src="server-icon.png.png" alt="Logo Hu Tao SMP">
                 Hu Tao SMP
-            </div>
+            </a>
 
             <div class="navlinks">
-                <a href="#rank">Rank</a>
-                <a href="#topup">Top Up</a>
+                <a href="topup.html#rank">Rank</a>
+                <a href="topup.html#topup">Top Up</a>
                 <a href="clan.html">Clan</a>
                 <a href="#footer">Server Info</a>
             </div>
@@ -1115,8 +1049,8 @@
 
         <!-- Dropdown menu khusus mobile -->
         <div class="mobile-menu" id="mobileMenu">
-            <a href="#rank" onclick="closeMobileMenu()">Rank</a>
-            <a href="#topup" onclick="closeMobileMenu()">Top Up</a>
+            <a href="topup.html#rank" onclick="closeMobileMenu()">Rank</a>
+            <a href="topup.html#topup" onclick="closeMobileMenu()">Top Up</a>
             <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
             <a href="#footer" onclick="closeMobileMenu()">Server Info</a>
             <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
@@ -1129,31 +1063,31 @@
 
         <!-- ============ HERO ============ -->
         <section class="hero wrap">
-            <span class="eyebrow"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
+            <span class="eyebrow hero-anim d1"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
 
-            <div class="banner-frame reveal">
+            <div class="banner-frame hero-anim d2">
                 <img src="sads.png" alt="Hu Tao SMP Banner">
             </div>
 
-            <h1 class="title">
+            <h1 class="title hero-anim">
                 Hu Tao SMP
                 <em>Survival Seru, Teman Baru, Petualangan Tanpa Batas!</em>
             </h1>
 
-            <p class="sub">
+            <p class="sub hero-anim d4">
                 Server Minecraft survival bertema oriental dengan ekonomi hidup dan komunitas hangat.
                 Bangun rumahmu, kumpulkan cuan, naik rank, dan jadi bagian dari keluarga Wangsheng.
             </p>
 
-            <div class="hero-ctas">
+            <div class="hero-ctas hero-anim d5">
                 <a class="btn btn-primary" href="https://chat.whatsapp.com/JgSKX5OjKLU30SxYpjv9nX?s=cl&p=a&ilr=0&amv=3"
                     target="_blank" rel="noopener">
                     Gabung via WhatsApp →
                 </a>
-                <a class="btn btn-ghost" href="#rank">Lihat Rank</a>
+                <a class="btn btn-ghost" href="topup.html#rank">Lihat Rank</a>
             </div>
 
-            <div class="pillrow">
+            <div class="pillrow hero-anim d6">
                 <span class="pill">Survival</span>
                 <span class="pill">Economy</span>
                 <span class="pill">AFK</span>
@@ -1170,311 +1104,32 @@
             </div>
         </section>
 
-        <!-- ============ RANK ============ -->
-        <section class="section" id="rank">
-            <div class="wrap">
-
-                <div class="section-head reveal">
-                    <span class="kicker">Tiket Keanggotaan</span>
-                    <h2>Pilih Rank-mu</h2>
-                    <p>Setiap rank adalah "tiket" resmi dari Wangsheng — makin tinggi rank, makin banyak fasilitas yang
-                        kamu dapat di dunia Hu Tao SMP.</p>
-                </div>
-
-                <div class="ranks-grid">
-
-                    <!-- Rank 1 -->
-                    <div class="ticket reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 01 / YELAN</span>
-                            <div class="ticket-seal">遣<br>使</div>
-                        </div>
-                        <h3>Yelan</h3>
-                        <div class="price">Rp15.000<small>Premium Rank I</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">Claim block 15.000</span>
-                            <span class="pill" style="font-size: 10px;">Sethome 5</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/pv3</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                        </ul>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Yelan','Rp15.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                    <!-- Rank 2 -->
-                    <div class="ticket reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 02 / BENNET</span>
-                            <div class="ticket-seal">助<br>理</div>
-                        </div>
-                        <h3>Bennet</h3>
-                        <div class="price">Rp35.000<small>/Premium Rank II</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">Claim block 35.000</span>
-                            <span class="pill" style="font-size: 10px;">Sethome 8</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/pv5</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                            <li>/fly</li>
-                            <br>
-                        </ul>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">+Semua fitur yelan</span>
-                        </div>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Bennet','Rp35.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                    <!-- Rank 3 -->
-                    <div class="ticket reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 03 / XINGQIU</span>
-                            <div class="ticket-seal">守<br>衛</div>
-                        </div>
-                        <h3>XingQiu</h3>
-                        <div class="price">Rp65.000<small>/Premium Rank III</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">Claim block 70.000</span>
-                            <span class="pill" style="font-size: 10px;">Sethome 12</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/pv8</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                            <li>/fly</li>
-                            <li>/invsee</li>
-                        </ul>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">+Semua fitur Bennet</span>
-                        </div>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('XingQiu','Rp65.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                    <!-- Rank 4 -->
-                    <div class="ticket reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 04 / ZHONGLI</span>
-                            <div class="ticket-seal">管<br>理</div>
-                        </div>
-                        <h3>ZhongLi</h3>
-                        <div class="price">Rp120.000<small>/Elite Rank</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">Claim block 100.000</span>
-                            <span class="pill" style="font-size: 10px;">Sethome 15</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/repair all</li>
-                            <li>/pv12</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                            <li>/fly</li>
-                            <li>/invsee</li>
-                            <li>/timeset</li>
-                            <li>/weather</li>
-                            <li>/endersee </li>
-                        </ul>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">+Semua fitur XingQiu</span>
-                        </div>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('ZhongLi','Rp120.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                    <!-- Rank 5 -->
-                    <div class="ticket reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 05 / XIANGLING</span>
-                            <div class="ticket-seal">董<br>事</div>
-                        </div>
-                        <h3>XiangLing</h3>
-                        <div class="price">Rp150.000<small>/Legend Rank</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">Claim block 150.000</span>
-                            <span class="pill" style="font-size: 10px;">Sethome 20</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/repair all</li>
-                            <li>/pv16</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                            <li>/fly</li>
-                            <li>/invsee</li>
-                            <li>/timeset</li>
-                            <li>/weather</li>
-                            <li>/endersee</li>
-                            <li>/tp</li>
-                        </ul>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">+Semua fitur ZhongLi</span>
-                        </div>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('XiangLing','Rp150.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                    <!-- Rank 6 (tertinggi) -->
-                    <div class="ticket top reveal">
-                        <div class="ticket-top">
-                            <span class="ticket-no">NO. 06 / HU TAO</span>
-                            <div class="ticket-seal">冥<br>王</div>
-                        </div>
-                        <h3>Hu Tao</h3>
-                        <div class="price">Rp300.000<small>/Mythic Rank</small></div>
-                        <div class="perf"></div>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 8px;">Claim block unlimited</span>
-                            <span class="pill" style="font-size: 8px;">Sethome unlimited</span>
-                        </div>
-                        <ul>
-                            <li>/feed</li>
-                            <li>/anvil</li>
-                            <li>/workbench</li>
-                            <li>/repair</li>
-                            <li>/repair all</li>
-                            <li>/pv20</li>
-                            <li>/kit</li>
-                            <li>/enderchest</li>
-                            <li>/fly</li>
-                            <li>/invsee</li>
-                            <li>/timeset</li>
-                            <li>/weather</li>
-                            <li>/endersee</li>
-                            <li>/tp</li>
-                            <li>/speed</li>
-                            <li>//wand</li>
-                            <h3>+ Boost skill</h3>
-                        </ul>
-                        <br>
-                        <div class="pillrow">
-                            <span class="pill" style="font-size: 10px;">+Semua fitur XiangLing</span>
-                        </div>
-                        <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Hu Tao','Rp300.000')">Beli via WhatsApp</a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- ============ TOP UP ============ -->
-        <section class="section" id="topup">
-            <div class="wrap">
-
-                <div class="section-head reveal">
-                    <span class="kicker">Isi Ulang Saldo</span>
-                    <h2>Top Up Money, Point & Skill</h2>
-                    <p>Atur jumlah yang kamu mau, total harga terhitung otomatis, lalu kirim pesanan langsung ke admin
-                        via WhatsApp.</p>
-                </div>
-
-                <div class="topup-grid">
-
-                    <!-- Money -->
-                    <div class="topup-card reveal">
-                        <div class="topup-icon">💰</div>
-                        <h3>Money</h3>
-                        <div class="topup-rate">Rp100rb (in-game) = <b>Rp5.000</b></div>
-                        <div class="stepper">
-                            <button type="button" onclick="stepQty('money', -1)">−</button>
-                            <input type="text" id="money-qty" value="1" readonly>
-                            <button type="button" onclick="stepQty('money', 1)">+</button>
-                        </div>
-                        <div class="topup-total">Total: <span id="money-total">Rp5.000</span></div>
-                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('money')">Pesan via WhatsApp</a></div>
-                    </div>
-
-                    <!-- Point -->
-                    <div class="topup-card reveal">
-                        <div class="topup-icon">✨</div>
-                        <h3>Point</h3>
-                        <div class="topup-rate">20 Point = <b>Rp1.000</b></div>
-                        <div class="stepper">
-                            <button type="button" onclick="stepQty('point', -1)">−</button>
-                            <input type="text" id="point-qty" value="1" readonly>
-                            <button type="button" onclick="stepQty('point', 1)">+</button>
-                        </div>
-                        <div class="topup-total">Total: <span id="point-total">Rp1.000</span></div>
-                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('point')">Pesan via WhatsApp</a></div>
-                    </div>
-
-                    <!-- Skill -->
-                    <div class="topup-card reveal">
-                        <div class="topup-icon">🔥</div>
-                        <h3>Skill</h3>
-                        <div class="topup-rate">1 Skill = <b>Rp7.000</b></div>
-                        <div class="stepper">
-                            <button type="button" onclick="stepQty('skill', -1)">−</button>
-                            <input type="text" id="skill-qty" value="1" readonly>
-                            <button type="button" onclick="stepQty('skill', 1)">+</button>
-                        </div>
-                        <div class="topup-total">Total: <span id="skill-total">Rp7.000</span></div>
-                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('skill')">Pesan via WhatsApp</a></div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- ============ FOOTER ============ -->
     <footer id="footer">
         <div class="wrap">
-            <div class="ip-box" onclick="copyIP()">
-                <div><small>Server IP</small><br>hu-tao.nexuscloud.id</div>
-            </div>
-            <div class="ip-box" onclick="copyPort()">
-                <div><small>Port</small><br>25502</div>
+            <div class="ip-groups">
+                <div class="ip-group">
+                    <span class="ip-group-label">Java Edition</span>
+                    <div class="ip-row">
+                        <div class="ip-box" onclick="copyIPJava(this)">
+                            <div><small>IP:Port (klik salin)</small><br>hu-tao.nexuscloud.id:25598</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ip-group">
+                    <span class="ip-group-label">Bedrock Edition</span>
+                    <div class="ip-row">
+                        <div class="ip-box" onclick="copyIPBedrock(this)">
+                            <div><small>Server Address</small><br>hu-tao.nexuscloud.id</div>
+                        </div>
+                        <div class="ip-box" onclick="copyPortBedrock(this)">
+                            <div><small>Port</small><br>25502</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="foot-links">
@@ -1523,7 +1178,7 @@
 
         /* ----------------------------------------------------------
            Nomor WhatsApp admin — dipakai oleh modal pemilihan admin
-           di semua tombol beli rank, top up, dan chat admin.
+           di tombol Chat Admin (navbar & menu mobile).
         ---------------------------------------------------------- */
         const ADMINS = {
             clay: { name: 'Clay', number: '6285761779383' },
@@ -1552,6 +1207,20 @@
         window.addEventListener('resize', () => {
             if (window.innerWidth > 760) closeMobileMenu();
         });
+
+        /* ----------------------------------------------------------
+           Progress bar scroll di bagian atas halaman.
+        ---------------------------------------------------------- */
+        const scrollProgress = document.getElementById('scrollProgress');
+        function updateScrollProgress() {
+            const h = document.documentElement;
+            const scrolled = h.scrollTop;
+            const max = h.scrollHeight - h.clientHeight;
+            const pct = max > 0 ? (scrolled / max) * 100 : 0;
+            scrollProgress.style.width = pct + '%';
+        }
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        updateScrollProgress();
 
         /* ----------------------------------------------------------
            Efek abu bara: bikin beberapa titik lalu kasih posisi
@@ -1584,54 +1253,7 @@
         document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
         /* ----------------------------------------------------------
-           Kalkulator Top Up (Money / Point / Skill).
-           Tiap item punya harga satuan, label untuk pesan WA,
-           dan jumlah yang bisa diubah lewat tombol +/-.
-        ---------------------------------------------------------- */
-        const topupRates = {
-            money: 5000,
-            point: 1000,
-            skill: 7000,
-        };
-
-        const topupLabels = {
-            money: 'Rp100rb Money',
-            point: '20 Point',
-            skill: '1 Skill',
-        };
-
-        const topupQty = {
-            money: 1,
-            point: 1,
-            skill: 1,
-        };
-
-        function formatRupiah(amount) {
-            return 'Rp' + amount.toLocaleString('id-ID');
-        }
-
-        function updateTopupCard(itemKey) {
-            const quantity = topupQty[itemKey];
-            const total = quantity * topupRates[itemKey];
-
-            document.getElementById(itemKey + '-qty').value = quantity;
-            document.getElementById(itemKey + '-total').textContent = formatRupiah(total);
-        }
-
-        function stepQty(itemKey, delta) {
-            const MIN_QTY = 1;
-            const MAX_QTY = 99;
-            topupQty[itemKey] = Math.min(MAX_QTY, Math.max(MIN_QTY, topupQty[itemKey] + delta));
-            updateTopupCard(itemKey);
-        }
-
-        // set nilai awal saat halaman pertama kali dimuat
-        Object.keys(topupRates).forEach(updateTopupCard);
-
-        /* ----------------------------------------------------------
-           Modal pilih admin — dipakai untuk beli rank, top up,
-           dan chat admin umum. Setelah admin & (kalau perlu) IGN
-           diisi, pesan otomatis dibuka lewat wa.me nomor admin itu.
+           Modal pilih admin — dipakai untuk Chat Admin umum.
         ---------------------------------------------------------- */
         function openModal(contextText, baseMessage, needsIGN) {
             document.getElementById('modalContext').textContent = contextText;
@@ -1679,20 +1301,6 @@
 
             window.open(`https://wa.me/${admin.number}?text=${encodeURIComponent(message)}`, '_blank');
             closeModal();
-        }
-
-        function openRankModal(rankName, price) {
-            const contextText = `${rankName} — ${price}`;
-            const baseMessage = `Halo Admin {ADMIN}, saya mau beli rank ${rankName} (${price}).`;
-            openModal(contextText, baseMessage, true);
-        }
-
-        function openTopupModal(itemKey) {
-            const quantity = topupQty[itemKey];
-            const total = formatRupiah(quantity * topupRates[itemKey]);
-            const contextText = `Top Up ${topupLabels[itemKey]} x${quantity} — Total ${total}`;
-            const baseMessage = `Halo Admin {ADMIN}, saya mau top up ${topupLabels[itemKey]} sebanyak ${quantity}x (Total ${total}).`;
-            openModal(contextText, baseMessage, true);
         }
 
         function openChatModal() {
@@ -1744,13 +1352,13 @@
         setInterval(refreshServerStatus, STATUS_REFRESH_MS);
 
         /* ----------------------------------------------------------
-           Salin IP server ke clipboard saat kotak IP diklik.
+           Salin IP/Port ke clipboard. Java pakai IP:Port digabung
+           jadi satu (langsung paste di Server Address Minecraft),
+           sementara Bedrock butuh Server Address dan Port terpisah.
         ---------------------------------------------------------- */
-        function copyIP() {
-            const SERVER_IP = 'hu-tao.nexuscloud.id';
-
-            navigator.clipboard.writeText(SERVER_IP).then(() => {
-                const label = document.querySelector('.ip-box small');
+        function copyToClipboard(text, boxEl) {
+            navigator.clipboard.writeText(text).then(() => {
+                const label = boxEl.querySelector('small');
                 const originalText = label.textContent;
 
                 label.textContent = 'Tersalin!';
@@ -1759,18 +1367,17 @@
                 }, 1500);
             });
         }
-        function copyPort() {
-            const PORT = '25502';
 
-            navigator.clipboard.writeText(PORT).then(() => {
-                const label = document.querySelector('.ip-box small');
-                const originalText = label.textContent;
+        function copyIPJava(boxEl) {
+            copyToClipboard('hu-tao.nexuscloud.id:25598', boxEl);
+        }
 
-                label.textContent = 'Tersalin!';
-                setTimeout(() => {
-                    label.textContent = originalText;
-                }, 1500);
-            });
+        function copyIPBedrock(boxEl) {
+            copyToClipboard('hu-tao.nexuscloud.id', boxEl);
+        }
+
+        function copyPortBedrock(boxEl) {
+            copyToClipboard('25502', boxEl);
         }
 
     </script>

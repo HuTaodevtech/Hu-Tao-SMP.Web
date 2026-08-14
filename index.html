@@ -200,6 +200,7 @@
 
         .navlinks {
             display: flex;
+            align-items: center;
             gap: 28px;
             font-size: .92rem;
             color: var(--cream);
@@ -227,6 +228,32 @@
 
         .navlinks a:hover::after {
             width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vote-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: rgba(227, 172, 61, .08);
+            color: var(--gold-bright);
+            font-weight: 600;
+            font-size: .85rem;
+            transition: border-color .2s ease, background .2s ease, transform .2s ease;
+        }
+
+        .vote-btn:hover {
+            border-color: var(--gold);
+            background: rgba(227, 172, 61, .16);
+            transform: translateY(-2px);
         }
 
         .nav-cta {
@@ -326,7 +353,7 @@
         }
 
         .mobile-menu.open {
-            max-height: 420px;
+            max-height: 480px;
         }
 
         .mobile-menu a {
@@ -337,12 +364,23 @@
         }
 
         .mobile-menu a.chat-admin-link {
-            margin: 10px 24px 18px;
+            margin: 10px 24px 0;
             padding: 13px;
             text-align: center;
             border: 1px solid var(--gold);
             border-radius: 8px;
             background: rgba(227, 172, 61, .1);
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+
+        .mobile-menu a.vote-link {
+            margin: 10px 24px 18px;
+            padding: 13px;
+            text-align: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(227, 172, 61, .04);
             color: var(--gold-bright);
             font-weight: 600;
         }
@@ -353,6 +391,10 @@
             }
 
             .nav-cta {
+                display: none;
+            }
+
+            .vote-btn {
                 display: none;
             }
 
@@ -677,6 +719,7 @@
             gap: 22px;
             margin-bottom: 18px;
             font-size: .85rem;
+            flex-wrap: wrap;
         }
 
         .foot-links a {
@@ -687,6 +730,22 @@
         .foot-links a:hover {
             opacity: 1;
             color: var(--gold-bright);
+        }
+
+        .foot-links a.vote-highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--gold-bright);
+            opacity: 1;
+        }
+
+        .foot-links a.vote-highlight:hover {
+            border-color: var(--gold);
+            background: rgba(227, 172, 61, .1);
         }
 
         footer p {
@@ -1038,9 +1097,14 @@
                 <a href="#footer">Server Info</a>
             </div>
 
-            <a class="nav-cta" href="javascript:void(0)" onclick="openChatModal()">
-                Chat Admin
-            </a>
+            <div class="nav-actions">
+                <a class="vote-btn" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener">
+                    ⭐ Vote
+                </a>
+                <a class="nav-cta" href="javascript:void(0)" onclick="openChatModal()">
+                    Chat Admin
+                </a>
+            </div>
 
             <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
@@ -1053,6 +1117,9 @@
             <a href="topup.html#topup" onclick="closeMobileMenu()">Top Up</a>
             <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
             <a href="#footer" onclick="closeMobileMenu()">Server Info</a>
+            <a class="vote-link" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                ⭐ Vote Server
+            </a>
             <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
                 Chat Admin
             </a>
@@ -1085,6 +1152,9 @@
                     Gabung via WhatsApp →
                 </a>
                 <a class="btn btn-ghost" href="topup.html#rank">Lihat Rank</a>
+                <a class="btn btn-ghost" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener">
+                    ⭐ Vote Server
+                </a>
             </div>
 
             <div class="pillrow hero-anim d6">
@@ -1136,6 +1206,7 @@
                 <a href="https://chat.whatsapp.com/JgSKX5OjKLU30SxYpjv9nX?s=cl&p=a&ilr=0&amv=3" target="_blank" rel="noopener">WhatsApp</a>
                 <a href="https://discord.gg/TuKNkSFM5" target="_blank" rel="noopener">Discord</a>
                 <a href="https://www.tiktok.com/@hu.tao.smp?_r=1&_t=ZS-98BG7XpfNbj">TikTok</a>
+                <a href="https://minecraft-mp.com/server-s361279" target="_blank" rel="noopener">Minecraft-MP</a>
             </div>
 
             <p>© 2026 Hu Tao SMP — Wangsheng Funeral Parlor. Tidak berafiliasi dengan Mojang / Microsoft.</p>

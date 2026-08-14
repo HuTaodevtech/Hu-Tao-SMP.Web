@@ -1259,10 +1259,93 @@
             color: var(--cream);
             opacity: .5;
         }
+
+        /* ==========================================================
+       11. TOAST NOTIFIKASI (pengganti alert() bawaan browser)
+       ========================================================== */
+        .toast-stack {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 360px;
+            padding: 0 16px;
+            pointer-events: none;
+        }
+
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 13px 16px;
+            border-radius: 10px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+            font-size: .86rem;
+            color: var(--ghost);
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(-16px) scale(.97);
+            transition: opacity .25s cubic-bezier(.16, 1, .3, 1), transform .25s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .toast.leaving {
+            opacity: 0;
+            transform: translateY(-10px) scale(.97);
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        .toast.success {
+            border-color: rgba(82, 217, 127, .4);
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(82, 217, 127, .16);
+            color: var(--green);
+        }
+
+        .toast.error {
+            border-color: rgba(227, 93, 93, .4);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(227, 93, 93, .16);
+            color: var(--red);
+        }
+
+        .toast.info .toast-icon {
+            background: rgba(227, 172, 61, .16);
+            color: var(--gold-bright);
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Wadah notifikasi toast (pengganti alert bawaan browser) -->
+    <div class="toast-stack" id="toastStack"></div>
 
     <!-- Progress bar scroll di paling atas -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -1450,17 +1533,45 @@
                 <h3>Vote Staff Favorit</h3>
                 <div class="modal-close" onclick="closeVoteStaffModal()">✕</div>
             </div>
-            <p class="vote-staff-context">Menurutmu siapa staff paling asik di Hu Tao SMP? Vote favoritmu — hasilnya live dan kelihatan sama semua orang.</p>
+            <p class="vote-staff-context">Menurutmu siapa staff paling asik di Hu Tao SMP? Vote favoritmu — live vote.</p>
 
             <div class="vote-staff-grid" id="voteAdminGrid">
                 <!-- Diisi otomatis lewat JavaScript -->
             </div>
 
-            <p class="vote-admin-note">1 vote per perangkat/browser. Data hitungan tersimpan lewat layanan hitung publik.</p>
+            <p class="vote-admin-note">1 vote per perangkat/browser. Data hitungan tersimpan lewat API layanan hitung publik.</p>
         </div>
     </div>
 
     <script>
+
+        /* ----------------------------------------------------------
+           Toast notifikasi — pengganti alert() bawaan browser.
+           Muncul melayang dari atas layar, auto-hilang sendiri.
+           Dipakai buat pesan error/sukses di seluruh halaman.
+        ---------------------------------------------------------- */
+        function showToast(message, type = 'info', duration = 3200) {
+            const stack = document.getElementById('toastStack');
+            if (!stack) return;
+
+            const icons = { success: '✓', error: '✕', info: 'i' };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span>${message}</span>
+            `;
+
+            stack.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.add('leaving');
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 250);
+            }, duration);
+        }
 
         /* ----------------------------------------------------------
            Nomor WhatsApp admin — dipakai oleh modal pemilihan admin
@@ -1566,7 +1677,7 @@
 
         function submitOrder() {
             if (!selectedAdminKey) {
-                alert('Pilih admin dulu ya, kak!');
+                showToast('Pilih admin dulu ya, kak!', 'error');
                 return;
             }
 
@@ -1574,7 +1685,7 @@
             if (currentNeedsIGN) {
                 ign = document.getElementById('modalIGN').value.trim();
                 if (!ign) {
-                    alert('Isi IGN Minecraft dulu ya, kak!');
+                    showToast('Isi IGN Minecraft dulu ya, kak!', 'error');
                     return;
                 }
             }
@@ -1675,11 +1786,11 @@
            "1 vote per browser" dijaga lewat localStorage (bukan anti
            curang mutlak, cuma nyegah spam klik biasa).
         ---------------------------------------------------------- */
-        const VOTE_STORAGE_KEY = 'hutaosmp_staff_vote';
+        const VOTE_STORAGE_KEY = 'hutaosmp_staff_vote_v2';
 
         // Prefix unik biar key counter kita nggak nabrak punya website lain,
         // karena layanan ini nggak pakai namespace terpisah (semua key publik & global).
-        const VOTE_KEY_PREFIX = 'hutaosmp2026_staff_vote_';
+        const VOTE_KEY_PREFIX = 'hutaosmp2026_staff_vote_v2_';
 
         const VOTE_ADMINS = [
             { key: 'clay', name: 'Clay', role: 'Admin' },
@@ -1734,7 +1845,7 @@
                         </div>
                         <button class="vote-admin-btn${hasVoted ? ' voted' : ''}"
                             ${btnDisabled ? 'disabled' : ''}
-                            onclick="castAdminVote('${admin.key}')">
+                            onclick="castAdminVote('${admin.key}', this)">
                             ${hasVoted ? '✓ Voted' : (btnDisabled ? 'Sudah vote' : 'Vote')}
                         </button>
                     </div>
@@ -1762,18 +1873,45 @@
             renderVoteAdminGrid(counts);
         }
 
-        async function castAdminVote(adminKey) {
-            if (localStorage.getItem(VOTE_STORAGE_KEY)) return;
+        // Kunci sementara di memori, aktif dari detik pertama tombol
+        // diklik (bukan nunggu localStorage kesimpen setelah response
+        // API selesai) — ini yang nyegah celah spam-klik saat delay.
+        let voteRequestPending = false;
+
+        function setVoteButtonsBusy(busy) {
+            document.querySelectorAll('.vote-admin-btn').forEach((btn) => {
+                if (busy) {
+                    btn.disabled = true;
+                } else if (!localStorage.getItem(VOTE_STORAGE_KEY)) {
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        async function castAdminVote(adminKey, btnEl) {
+            if (voteRequestPending || localStorage.getItem(VOTE_STORAGE_KEY)) return;
+
+            voteRequestPending = true;
+            setVoteButtonsBusy(true);
+
+            const originalLabel = btnEl ? btnEl.textContent : null;
+            if (btnEl) btnEl.textContent = 'Mengirim...';
 
             try {
                 const res = await fetch(countApiUrl('hit', adminKey));
                 if (!res.ok) throw new Error('Request gagal, status: ' + res.status);
-                await res.json();
+                const data = await res.json();
                 localStorage.setItem(VOTE_STORAGE_KEY, adminKey);
+                const staff = VOTE_ADMINS.find((a) => a.key === adminKey);
+                showToast(`Vote buat ${staff ? staff.name : 'staff ini'} berhasil dikirim, makasih ya!`, 'success');
                 loadVoteAdminCounts();
             } catch (err) {
                 console.error('Vote admin error:', err);
-                alert('Gagal mengirim vote, coba lagi beberapa saat lagi ya, kak!');
+                showToast('Gagal mengirim vote, coba lagi beberapa saat lagi ya!', 'error');
+                if (btnEl && originalLabel) btnEl.textContent = originalLabel;
+                setVoteButtonsBusy(false);
+            } finally {
+                voteRequestPending = false;
             }
         }
 

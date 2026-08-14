@@ -863,88 +863,92 @@
 
 
         /* ==========================================================
-       9. VOTE ADMIN FAVORIT (polling live via CountAPI, tanpa DB sendiri)
+       9. MODAL VOTE STAFF FAVORIT (polling live, tanpa DB sendiri)
        ========================================================== */
-        .vote-admin-section {
-            position: relative;
-            z-index: 1;
-            padding: 20px 0 60px;
-        }
-
-        .vote-admin-head {
-            text-align: center;
-            max-width: 560px;
-            margin: 0 auto 34px;
-        }
-
-        .vote-admin-head h2 {
-            font-family: 'Fraunces', serif;
-            font-weight: 700;
-            font-size: clamp(1.6rem, 4vw, 2.2rem);
-            color: var(--gold-bright);
-            margin-bottom: 10px;
-        }
-
-        .vote-admin-head p {
-            font-size: .92rem;
+        .vote-staff-context {
+            margin: 4px 0 18px;
+            font-size: .86rem;
             color: var(--cream);
-            opacity: .72;
-            line-height: 1.6;
+            opacity: .68;
+            line-height: 1.5;
         }
 
-        .vote-admin-grid {
+        .vote-staff-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            max-width: 900px;
-            margin: 0 auto;
+            gap: 10px;
+            max-height: 52vh;
+            overflow-y: auto;
+            padding-right: 2px;
         }
 
-        @media (max-width: 760px) {
-            .vote-admin-grid {
-                grid-template-columns: 1fr;
-                max-width: 420px;
+        @media (max-width: 500px) {
+            .vote-staff-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        .vote-staff-grid::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .vote-staff-grid::-webkit-scrollbar-thumb {
+            background: var(--line);
+            border-radius: 999px;
         }
 
         .vote-admin-card {
             position: relative;
-            background: var(--panel);
+            background: rgba(227, 172, 61, .04);
             border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 26px 20px;
+            border-radius: 12px;
+            padding: 16px 10px 14px;
             text-align: center;
-            transition: border-color .2s ease, transform .2s ease;
+            transition: border-color .2s ease, background .2s ease, transform .2s ease;
         }
 
         .vote-admin-card:hover {
             border-color: var(--gold);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .vote-admin-card.leading {
             border-color: var(--gold);
-            box-shadow: 0 0 0 1px var(--gold), 0 14px 34px rgba(227, 172, 61, .12);
+            background: linear-gradient(180deg, rgba(227, 172, 61, .12), rgba(227, 172, 61, .03) 60%);
+            box-shadow: 0 0 0 1px var(--gold);
         }
 
-        .vote-admin-crown {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.1rem;
-            filter: drop-shadow(0 2px 6px rgba(227, 172, 61, .5));
+        .vote-admin-badge {
             display: none;
+            align-items: center;
+            gap: 4px;
+            width: fit-content;
+            margin: 0 auto 8px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--ember), var(--gold-bright));
+            color: #1a0906;
+            font-family: 'Silkscreen';
+            font-size: .52rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-weight: 700;
         }
 
-        .vote-admin-card.leading .vote-admin-crown {
-            display: block;
+        .vote-admin-card.leading .vote-admin-badge {
+            display: flex;
+        }
+
+        .vote-admin-card.leading .vote-admin-avatar {
+            background: linear-gradient(135deg, var(--maroon-deep), var(--maroon));
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(227, 172, 61, .12);
         }
 
         .vote-admin-avatar {
-            width: 58px;
-            height: 58px;
-            margin: 0 auto 14px;
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -952,40 +956,48 @@
             background: var(--maroon-deep);
             border: 1px solid var(--line);
             font-family: 'Silkscreen';
-            font-size: 1.3rem;
+            font-size: 1rem;
             color: var(--gold-bright);
         }
 
         .vote-admin-name {
             font-weight: 700;
-            font-size: 1.02rem;
-            margin-bottom: 4px;
+            font-size: .82rem;
+            margin-bottom: 1px;
             color: var(--ghost);
+        }
+
+        .vote-admin-role {
+            font-size: .62rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ember);
+            margin-bottom: 8px;
         }
 
         .vote-admin-count {
             font-family: 'Silkscreen';
-            font-size: 1.5rem;
+            font-size: 1.15rem;
             color: var(--gold-bright);
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .vote-admin-count-label {
-            font-size: .68rem;
-            letter-spacing: .1em;
+            font-size: .58rem;
+            letter-spacing: .08em;
             text-transform: uppercase;
             color: var(--cream);
             opacity: .5;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
 
         .vote-admin-bar-track {
             width: 100%;
-            height: 6px;
+            height: 4px;
             border-radius: 999px;
             background: rgba(227, 172, 61, .1);
             overflow: hidden;
-            margin-bottom: 18px;
+            margin-bottom: 10px;
         }
 
         .vote-admin-bar-fill {
@@ -998,13 +1010,13 @@
 
         .vote-admin-btn {
             width: 100%;
-            padding: 11px;
+            padding: 8px 6px;
             border: 1px solid var(--line);
-            border-radius: 8px;
+            border-radius: 7px;
             background: rgba(227, 172, 61, .06);
             color: var(--gold-bright);
             font-weight: 600;
-            font-size: .86rem;
+            font-size: .74rem;
             cursor: pointer;
             transition: border-color .2s ease, background .2s ease, transform .15s ease;
         }
@@ -1028,8 +1040,8 @@
 
         .vote-admin-note {
             text-align: center;
-            margin-top: 22px;
-            font-size: .74rem;
+            margin-top: 16px;
+            font-size: .7rem;
             color: var(--cream);
             opacity: .45;
         }
@@ -1067,6 +1079,10 @@
             box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
             transform: translateY(14px);
             transition: transform .2s ease;
+        }
+
+        .modal-box.wide {
+            max-width: 560px;
         }
 
         .modal-overlay.open .modal-box {
@@ -1273,6 +1289,9 @@
                 <a class="vote-btn" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener">
                     ⭐ Vote
                 </a>
+                <a class="vote-btn" href="javascript:void(0)" onclick="openVoteStaffModal()">
+                    🗳️ Staff
+                </a>
                 <a class="nav-cta" href="javascript:void(0)" onclick="openChatModal()">
                     Chat Admin
                 </a>
@@ -1291,6 +1310,9 @@
             <a href="#footer" onclick="closeMobileMenu()">Server Info</a>
             <a class="vote-link" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener" onclick="closeMobileMenu()">
                 ⭐ Vote Server
+            </a>
+            <a class="vote-link" href="javascript:void(0)" onclick="closeMobileMenu(); openVoteStaffModal()">
+                🗳️ Vote Staff Favorit
             </a>
             <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
                 Chat Admin
@@ -1327,6 +1349,9 @@
                 <a class="btn btn-ghost" href="https://minecraft-mp.com/server/361279/vote/" target="_blank" rel="noopener">
                     ⭐ Vote Server
                 </a>
+                <a class="btn btn-ghost" href="javascript:void(0)" onclick="openVoteStaffModal()">
+                    🗳️ Vote Staff Favorit
+                </a>
             </div>
 
             <div class="pillrow hero-anim d6">
@@ -1346,21 +1371,8 @@
             </div>
         </section>
 
-        <!-- ============ VOTE ADMIN FAVORIT ============ -->
-        <section class="vote-admin-section wrap">
-            <div class="vote-admin-head reveal">
-                <h2>Vote Admin Favorit</h2>
-                <p>Menurutmu siapa admin paling asik di Hu Tao SMP? Vote favoritmu di bawah ini!</p>
-            </div>
-
-            <div class="vote-admin-grid" id="voteAdminGrid">
-                <!-- Diisi otomatis lewat JavaScript -->
-            </div>
-
-            <p class="vote-admin-note">1 vote per perangkat/browser. Data hitungan tersimpan lewat layanan hitung publik (CountAPI).</p>
-        </section>
-
     </main>
+
 
     <!-- ============ FOOTER ============ -->
     <footer id="footer">
@@ -1428,6 +1440,23 @@
 
             <button class="modal-submit" onclick="submitOrder()">Kirim ke WhatsApp</button>
             <p class="modal-hint">Kamu akan diarahkan ke WhatsApp admin yang dipilih.</p>
+        </div>
+    </div>
+
+    <!-- ============ MODAL: VOTE STAFF FAVORIT ============ -->
+    <div class="modal-overlay" id="voteStaffModal" onclick="if(event.target===this) closeVoteStaffModal()">
+        <div class="modal-box wide">
+            <div class="modal-head">
+                <h3>Vote Staff Favorit</h3>
+                <div class="modal-close" onclick="closeVoteStaffModal()">✕</div>
+            </div>
+            <p class="vote-staff-context">Menurutmu siapa staff paling asik di Hu Tao SMP? Vote favoritmu — hasilnya live dan kelihatan sama semua orang.</p>
+
+            <div class="vote-staff-grid" id="voteAdminGrid">
+                <!-- Diisi otomatis lewat JavaScript -->
+            </div>
+
+            <p class="vote-admin-note">1 vote per perangkat/browser. Data hitungan tersimpan lewat layanan hitung publik.</p>
         </div>
     </div>
 
@@ -1638,23 +1667,42 @@
         }
 
         /* ----------------------------------------------------------
-           Vote Admin Favorit — polling live tanpa database sendiri.
-           Pakai CountAPI (gratis, tanpa API key) sebagai penghitung
-           publik per admin, jadi semua pengunjung lihat angka yang
-           sama. Batas "1 vote per browser" dijaga lewat localStorage
-           (bukan anti-curang mutlak, cuma nyegah spam klik biasa).
+           Vote Staff Favorit — polling live tanpa database sendiri.
+           Ditampilkan lewat modal (bukan section penuh) biar info
+           IP/Port di footer tetap dekat, nggak ketutup jauh ke bawah.
+           Pakai layanan counter publik gratis sebagai penghitung per
+           staff, jadi semua pengunjung lihat angka yang sama. Batas
+           "1 vote per browser" dijaga lewat localStorage (bukan anti
+           curang mutlak, cuma nyegah spam klik biasa).
         ---------------------------------------------------------- */
-        const VOTE_NAMESPACE = 'hutaosmp-2026';
-        const VOTE_STORAGE_KEY = 'hutaosmp_admin_vote';
+        const VOTE_STORAGE_KEY = 'hutaosmp_staff_vote';
+
+        // Prefix unik biar key counter kita nggak nabrak punya website lain,
+        // karena layanan ini nggak pakai namespace terpisah (semua key publik & global).
+        const VOTE_KEY_PREFIX = 'hutaosmp2026_staff_vote_';
 
         const VOTE_ADMINS = [
-            { key: 'clay', name: 'Clay' },
-            { key: 'winataa', name: 'Winataa' },
-            { key: 'pedal', name: 'Pedal' },
+            { key: 'clay', name: 'Clay', role: 'Admin' },
+            { key: 'pedal', name: 'Pedal', role: 'Admin' },
+            { key: 'winataa', name: 'Winataa', role: 'Admin' },
+            { key: 'zakhlinn', name: 'Zakhlinn', role: 'Moderator' },
+            { key: 'auliahwi', name: 'Auliahwi', role: 'Moderator' },
+            { key: 'frostioner', name: 'Frostioner', role: 'Helper' },
+            { key: 'jayya', name: 'Jayya', role: 'Helper' },
         ];
 
+        function openVoteStaffModal() {
+            document.getElementById('voteStaffModal').classList.add('open');
+        }
+
+        function closeVoteStaffModal() {
+            document.getElementById('voteStaffModal').classList.remove('open');
+        }
+
         function countApiUrl(action, key) {
-            return `https://api.countapi.xyz/${action}/${VOTE_NAMESPACE}/${key}`;
+            // countapi.xyz sudah tidak aktif, jadi kita pakai layanan
+            // penggantinya yang API-nya mirip: countapi.mileshilliard.com
+            return `https://countapi.mileshilliard.com/api/v1/${action}/${VOTE_KEY_PREFIX}${key}`;
         }
 
         function renderVoteAdminGrid(counts) {
@@ -1675,9 +1723,10 @@
 
                 return `
                     <div class="vote-admin-card${isLeading ? ' leading' : ''}">
-                        <div class="vote-admin-crown">👑</div>
+                        <div class="vote-admin-badge">✦ Top</div>
                         <div class="vote-admin-avatar">${admin.name[0]}</div>
                         <div class="vote-admin-name">${admin.name}</div>
+                        <div class="vote-admin-role">${admin.role}</div>
                         <div class="vote-admin-count">${count}</div>
                         <div class="vote-admin-count-label">vote</div>
                         <div class="vote-admin-bar-track">
@@ -1686,7 +1735,7 @@
                         <button class="vote-admin-btn${hasVoted ? ' voted' : ''}"
                             ${btnDisabled ? 'disabled' : ''}
                             onclick="castAdminVote('${admin.key}')">
-                            ${hasVoted ? '✓ Kamu vote ini' : (btnDisabled ? 'Sudah vote' : 'Vote')}
+                            ${hasVoted ? '✓ Voted' : (btnDisabled ? 'Sudah vote' : 'Vote')}
                         </button>
                     </div>
                 `;
@@ -1698,8 +1747,14 @@
             await Promise.all(VOTE_ADMINS.map(async (admin) => {
                 try {
                     const res = await fetch(countApiUrl('get', admin.key));
+                    if (res.status === 404) {
+                        // Key belum pernah di-vote sama sekali, anggap 0
+                        counts[admin.key] = 0;
+                        return;
+                    }
                     const data = await res.json();
-                    counts[admin.key] = data && typeof data.value === 'number' ? data.value : 0;
+                    const parsed = data && data.value !== undefined ? Number(data.value) : 0;
+                    counts[admin.key] = Number.isFinite(parsed) ? parsed : 0;
                 } catch (err) {
                     counts[admin.key] = 0;
                 }
@@ -1712,11 +1767,13 @@
 
             try {
                 const res = await fetch(countApiUrl('hit', adminKey));
+                if (!res.ok) throw new Error('Request gagal, status: ' + res.status);
                 await res.json();
                 localStorage.setItem(VOTE_STORAGE_KEY, adminKey);
                 loadVoteAdminCounts();
             } catch (err) {
-                alert('Gagal mengirim vote, coba lagi ya, kak!');
+                console.error('Vote admin error:', err);
+                alert('Gagal mengirim vote, coba lagi beberapa saat lagi ya, kak!');
             }
         }
 

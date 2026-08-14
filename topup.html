@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rank & Top Up — Hu Tao SMP</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #120a0c;
+            --bg-alt: #1b1013;
+            --panel: #201417;
+            --maroon: #4a1418;
+            --maroon-deep: #2b0d10;
+            --gold: #e3ac3d;
+            --gold-bright: #f4c95d;
+            --ember: #ff6b35;
+            --cream: #f2e6d3;
+            --ghost: #f5f0e8;
+            --line: rgba(227, 172, 61, 0.28);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        ::selection { background: var(--gold); color: #1a0906; }
+
+        body {
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 107, 53, 0.10), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 10%, rgba(227, 172, 61, 0.06), transparent),
+                var(--bg);
+            color: var(--cream);
+            font-family: 'Work Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+        .display { font-family: 'Fraunces', serif; }
+        .pixel { font-family: 'Silkscreen', monospace; }
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+        /* progress bar scroll */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 2px; width: 0%; z-index: 100;
+            background: linear-gradient(90deg, var(--ember), var(--gold-bright));
+            box-shadow: 0 0 10px rgba(255, 107, 53, .6);
+            transition: width .08s linear;
+        }
+
+        /* embers */
+        .embers { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+
+        .ember-dot {
+            position: absolute; bottom: -10px; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--ember); opacity: .55; filter: blur(0.5px); animation: float 14s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: .6; }
+            90% { opacity: .4; }
+            100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.25); }
+        }
+
+        @keyframes sweep {
+            to { left: 130%; }
+        }
+
+        /* navbar */
+        header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(18, 10, 12, 0.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+        }
+
+        nav.wrap { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+
+        .brand {
+            display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-weight: 700;
+            font-size: 1.15rem; color: var(--gold-bright); transition: opacity .2s ease;
+        }
+
+        .brand:hover { opacity: .82; }
+        .brand img { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); }
+
+        .navlinks { display: flex; gap: 28px; font-size: .92rem; color: var(--cream); opacity: .85; }
+        .navlinks a { position: relative; }
+
+        .navlinks a::after {
+            content: ""; position: absolute; left: 0; bottom: -4px; width: 0%; height: 1px;
+            background: var(--gold-bright); transition: width .25s ease;
+        }
+
+        .navlinks a:hover { color: var(--gold-bright); }
+        .navlinks a:hover::after { width: 100%; }
+
+        .nav-cta {
+            position: relative; background: linear-gradient(135deg, var(--ember), #c23b1f); color: #1a0906;
+            font-weight: 700; font-size: .85rem; padding: 10px 20px; border-radius: 6px;
+            box-shadow: 0 6px 18px rgba(255, 107, 53, .25); overflow: hidden; isolation: isolate;
+            transition: transform .2s cubic-bezier(.16, 1, .3, 1), box-shadow .2s ease;
+        }
+
+        .nav-cta::after {
+            content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .35), transparent); transform: skewX(-20deg);
+        }
+
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255, 107, 53, .35); }
+        .nav-cta:hover::after { animation: sweep .85s ease forwards; }
+
+        .hamburger {
+            display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px;
+            background: rgba(227, 172, 61, .06); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; z-index: 60;
+        }
+
+        .hamburger span {
+            display: block; width: 18px; height: 2px; margin: 0 auto; background: var(--gold-bright);
+            border-radius: 2px; transition: transform .2s ease, opacity .2s ease;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .mobile-menu {
+            position: fixed; top: 70px; left: 0; right: 0; z-index: 49; display: flex; flex-direction: column;
+            max-height: 0; overflow: hidden; background: rgba(18, 10, 12, 0.97); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line); transition: max-height .3s ease;
+        }
+
+        .mobile-menu.open { max-height: 420px; }
+        .mobile-menu a { padding: 16px 24px; font-size: 1rem; color: var(--cream); border-bottom: 1px solid var(--line); }
+
+        .mobile-menu a.chat-admin-link {
+            margin: 10px 24px 18px; padding: 13px; text-align: center; border: 1px solid var(--gold);
+            border-radius: 8px; background: rgba(227, 172, 61, .1); color: var(--gold-bright); font-weight: 600;
+        }
+
+        @media (max-width: 760px) {
+            .navlinks { display: none; }
+            .nav-cta { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        @media (min-width: 761px) {
+            .hamburger { display: none; }
+            .mobile-menu { display: none; }
+        }
+
+        /* mini hero */
+        .hero { position: relative; z-index: 1; padding: 60px 0 20px; text-align: center; }
+
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px; margin-bottom: 22px;
+            border: 1px solid var(--line); border-radius: 999px; font-size: .72rem; letter-spacing: .18em;
+            text-transform: uppercase; color: var(--gold);
+        }
+
+        .eyebrow .dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px var(--ember);
+            animation: pulseDot 1.8s ease-in-out infinite;
+        }
+
+        h1.title {
+            font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 700; line-height: 1.05;
+            background: linear-gradient(100deg, var(--gold-bright) 30%, var(--ember) 50%, var(--gold-bright) 70%);
+            background-size: 220% auto; -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: var(--gold-bright);
+            text-shadow: 0 2px 30px rgba(227, 172, 61, .25); animation: shine 6s linear infinite 1s;
+        }
+
+        @keyframes shine { to { background-position: -220% center; } }
+
+        .hero p.sub { max-width: 560px; margin: 18px auto 0; color: var(--cream); opacity: .78; font-size: 1.02rem; line-height: 1.6; }
+
+        @keyframes heroIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-anim { opacity: 0; animation: heroIn .7s cubic-bezier(.16, 1, .3, 1) forwards; }
+        .hero-anim.d1 { animation-delay: .05s; }
+        .hero-anim.d3 { animation-delay: .28s; }
+        h1.title.hero-anim { animation: heroIn .7s cubic-bezier(.16, 1, .3, 1) .15s forwards, shine 6s linear infinite 1s; }
+
+        /* section head */
+        .section { position: relative; z-index: 1; padding: 90px 0; }
+        .section-head { max-width: 640px; margin: 0 auto 56px; text-align: center; }
+
+        .section-head .kicker {
+            display: block; margin-bottom: 14px; font-family: 'Silkscreen'; font-size: .68rem;
+            letter-spacing: .22em; text-transform: uppercase; color: var(--ember);
+        }
+
+        .section-head h2 { font-family: 'Fraunces', serif; font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 600; color: var(--gold-bright); }
+        .section-head p { margin-top: 14px; color: var(--cream); opacity: .72; line-height: 1.6; }
+
+        .divider { width: 1px; height: 56px; margin: 0 auto; background: linear-gradient(var(--gold), transparent); }
+
+        /* rank tickets */
+        .ranks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+        @media (max-width: 900px) { .ranks-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .ranks-grid { grid-template-columns: 1fr; } }
+
+        .ticket {
+            position: relative; display: flex; flex-direction: column; gap: 14px;
+            background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(227, 172, 61, .12), transparent 70%), var(--panel);
+            border: 1px solid var(--line); border-radius: 4px; padding: 26px 24px 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            transform-style: preserve-3d; will-change: transform;
+            transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .25s ease, box-shadow .35s ease;
+        }
+
+        .ticket:hover {
+            transform: translateY(-6px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
+            border-color: var(--gold);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, .45), 0 0 0 1px rgba(227, 172, 61, .12);
+        }
+
+        .ticket::before, .ticket::after {
+            content: ""; position: absolute; top: 50%; width: 20px; height: 20px;
+            background: var(--bg); border-radius: 50%; transform: translateY(-50%);
+        }
+
+        .ticket::before { left: -10px; }
+        .ticket::after { right: -10px; }
+
+        .ticket .perf { position: absolute; left: 0; right: 0; top: 96px; border-top: 1px dashed var(--line); }
+
+        .ticket-top { display: flex; align-items: flex-start; justify-content: space-between; }
+        .ticket-no { font-family: 'Silkscreen'; font-size: .68rem; letter-spacing: .1em; color: var(--ember); }
+
+        .ticket-seal {
+            flex-shrink: 0; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            border: 1.5px solid var(--gold); border-radius: 50%; font-family: 'Silkscreen'; font-size: .62rem;
+            line-height: 1.1; text-align: center; color: var(--gold-bright); transition: transform .3s ease;
+        }
+
+        .ticket:hover .ticket-seal { transform: rotate(-8deg) scale(1.05); }
+
+        .ticket h3 { margin-top: 10px; font-family: 'Fraunces', serif; font-size: 1.36rem; font-weight: 600; color: var(--gold-bright); }
+
+        .ticket .price { margin-top: 2px; font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; color: var(--cream); }
+        .ticket .price small { font-family: 'Work Sans'; font-size: .55em; font-weight: 400; opacity: .6; }
+
+        .ticket ul { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+        .ticket ul li { position: relative; padding-left: 18px; font-size: .86rem; opacity: .82; }
+        .ticket ul li::before { content: "—"; position: absolute; left: 0; color: var(--ember); }
+
+        .ticket .buy { margin-top: auto; padding-top: 16px; }
+
+        .ticket .buy a, .topup-card .buy a {
+            position: relative; display: block; text-align: center; padding: 11px; border-radius: 6px;
+            background: rgba(227, 172, 61, .1); border: 1px solid var(--gold); color: var(--gold-bright);
+            font-weight: 600; font-size: .85rem; overflow: hidden; isolation: isolate;
+            transition: color .25s ease, transform .2s ease;
+        }
+
+        .ticket .buy a::before, .topup-card .buy a::before {
+            content: ""; position: absolute; inset: 0; background: var(--gold); transform: scaleX(0);
+            transform-origin: left; transition: transform .3s cubic-bezier(.16, 1, .3, 1); z-index: -1;
+        }
+
+        .ticket .buy a:hover, .topup-card .buy a:hover { color: #1a0906; transform: translateY(-1px); }
+        .ticket .buy a:hover::before, .topup-card .buy a:hover::before { transform: scaleX(1); }
+        .ticket .buy a:active, .topup-card .buy a:active { transform: translateY(0) scale(.98); }
+
+        .topup-card .buy a { background: linear-gradient(135deg, var(--ember), #c23b1f); color: #1a0906; font-weight: 700; border: none; }
+        .topup-card .buy a::before { background: #ffffff; opacity: .18; }
+        .topup-card .buy a:hover { color: #1a0906; }
+
+        .ticket.top { border-color: var(--gold); }
+        .ticket.top .ticket-seal { background: var(--gold); color: #1a0906; }
+
+        /* top up cards */
+        .topup-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+        @media (max-width: 860px) {
+            .topup-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+        }
+
+        .topup-card {
+            display: flex; flex-direction: column; gap: 16px;
+            background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(227, 172, 61, .12), transparent 70%), var(--panel);
+            border: 1px solid var(--line); border-radius: 12px; padding: 28px;
+            transform-style: preserve-3d; will-change: transform;
+            transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .25s ease, box-shadow .35s ease;
+        }
+
+        .topup-card:hover {
+            transform: translateY(-6px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
+            border-color: var(--gold);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, .4);
+        }
+
+        .topup-icon {
+            width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-deep)); border: 1px solid var(--line);
+            border-radius: 10px; font-size: 1.3rem; transition: transform .3s ease;
+        }
+
+        .topup-card:hover .topup-icon { transform: scale(1.1) rotate(-4deg); }
+
+        .topup-card h3 { font-family: 'Fraunces'; font-size: 1.25rem; font-weight: 600; color: var(--gold-bright); }
+        .topup-rate { font-size: .85rem; opacity: .72; }
+        .topup-rate b { font-weight: 600; color: var(--gold-bright); }
+
+        .stepper { display: flex; align-items: center; margin-top: 4px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+
+        .stepper button {
+            width: 38px; height: 40px; background: var(--maroon-deep); color: var(--gold-bright);
+            border: none; font-size: 1.1rem; cursor: pointer; transition: background .15s ease;
+        }
+
+        .stepper button:hover { background: var(--maroon); }
+
+        .stepper input {
+            width: 100%; text-align: center; background: transparent; border: none; color: var(--cream);
+            font-family: 'Silkscreen'; font-size: .95rem;
+        }
+
+        .stepper input:focus { outline: none; }
+
+        .topup-total { font-family: 'Fraunces'; font-size: 1.3rem; font-weight: 600; color: var(--cream); }
+        .topup-total span { color: var(--gold-bright); }
+
+        /* reveal on scroll */
+        .reveal {
+            opacity: 0; transform: translateY(24px) scale(.98);
+            transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
+            transition-delay: var(--reveal-delay, 0s);
+        }
+
+        .reveal.in { opacity: 1; transform: translateY(0) scale(1); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .hero-anim, h1.title { opacity: 1 !important; transform: none !important; animation: none !important; }
+            .ember-dot { display: none; animation: none; }
+            .eyebrow .dot { animation: none; }
+            .ticket:hover, .topup-card:hover { transform: none; }
+        }
+
+        /* modal (sama seperti index.html) */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+            padding: 20px; background: rgba(9, 5, 6, 0.72); backdrop-filter: blur(4px); opacity: 0;
+            pointer-events: none; transition: opacity .2s ease;
+        }
+
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .modal-box {
+            width: 100%; max-width: 420px; background: var(--panel); border: 1px solid var(--line);
+            border-radius: 14px; padding: 26px 24px 24px; box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
+            transform: translateY(14px); transition: transform .2s ease;
+        }
+
+        .modal-overlay.open .modal-box { transform: translateY(0); }
+
+        .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+        .modal-head h3 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--gold-bright); }
+
+        .modal-close {
+            flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+            background: rgba(227, 172, 61, .08); border: 1px solid var(--line); border-radius: 8px;
+            color: var(--gold-bright); font-size: 1rem; cursor: pointer; transition: transform .15s ease, border-color .15s ease;
+        }
+
+        .modal-close:hover { transform: rotate(90deg); border-color: var(--gold); }
+
+        .modal-context { margin-top: 4px; margin-bottom: 20px; font-size: .88rem; color: var(--cream); opacity: .68; }
+
+        .modal-label {
+            display: block; margin: 18px 0 10px; font-family: 'Silkscreen'; font-size: .66rem;
+            letter-spacing: .14em; text-transform: uppercase; color: var(--ember);
+        }
+
+        .admin-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+        .admin-option {
+            display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px;
+            background: rgba(227, 172, 61, .04); border: 1px solid var(--line); border-radius: 10px;
+            color: var(--cream); font-size: .82rem; font-weight: 600; cursor: pointer; transition: .15s;
+        }
+
+        .admin-option .admin-avatar {
+            width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: var(--maroon-deep); border: 1px solid var(--line);
+            font-family: 'Silkscreen'; font-size: .72rem; color: var(--gold-bright);
+        }
+
+        .admin-option:hover { border-color: var(--gold); transform: translateY(-2px); }
+        .admin-option.selected { border-color: var(--gold); background: rgba(227, 172, 61, .14); }
+        .admin-option.selected .admin-avatar { background: var(--gold); color: #1a0906; }
+
+        .modal-input {
+            width: 100%; padding: 12px 14px; background: var(--maroon-deep); border: 1px solid var(--line);
+            border-radius: 8px; color: var(--ghost); font-family: 'Work Sans'; font-size: .92rem;
+        }
+
+        .modal-input:focus { outline: none; border-color: var(--gold); }
+        .modal-input::placeholder { color: var(--cream); opacity: .4; }
+
+        .modal-submit {
+            position: relative; width: 100%; margin-top: 22px; padding: 13px; border: none; border-radius: 8px;
+            background: linear-gradient(135deg, var(--ember), #c23b1f); color: #1a0906; font-weight: 700;
+            font-size: .92rem; cursor: pointer; overflow: hidden; isolation: isolate; transition: transform .2s ease;
+        }
+
+        .modal-submit::after {
+            content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent); transform: skewX(-20deg);
+        }
+
+        .modal-submit:hover::after { animation: sweep .85s ease forwards; }
+        .modal-submit:hover { transform: translateY(-2px); }
+
+        .modal-hint { margin-top: 10px; font-size: .74rem; text-align: center; color: var(--cream); opacity: .5; }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="embers" id="embers"></div>
+
+    <header>
+        <nav class="wrap">
+            <a class="brand" href="index.html">
+                <img src="server-icon.png.png" alt="Logo Hu Tao SMP">
+                Hu Tao SMP
+            </a>
+
+            <div class="navlinks">
+                <a href="#rank">Rank</a>
+                <a href="#topup">Top Up</a>
+                <a href="clan.html">Clan</a>
+                <a href="index.html#footer">Server Info</a>
+            </div>
+
+            <a class="nav-cta" href="javascript:void(0)" onclick="openChatModal()">
+                Chat Admin
+            </a>
+
+            <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#rank" onclick="closeMobileMenu()">Rank</a>
+            <a href="#topup" onclick="closeMobileMenu()">Top Up</a>
+            <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
+            <a href="index.html#footer" onclick="closeMobileMenu()">Server Info</a>
+            <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
+                Chat Admin
+            </a>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero wrap">
+            <span class="eyebrow hero-anim d1"><span class="dot"></span> Wangsheng Funeral Parlor Presents</span>
+            <h1 class="title hero-anim">Rank & Top Up</h1>
+            <p class="sub hero-anim d3">
+                Naik rank atau isi ulang saldo dalam sekejap. Atur jumlahnya, total harga terhitung
+                otomatis, lalu kirim pesanan langsung ke admin via WhatsApp.
+            </p>
+        </section>
+
+        <section class="section" id="rank">
+            <div class="wrap">
+
+                <div class="section-head reveal">
+                    <span class="kicker">Tiket Keanggotaan</span>
+                    <h2>Pilih Rank-mu</h2>
+                    <p>Setiap rank adalah "tiket" resmi dari Wangsheng — makin tinggi rank, makin banyak fasilitas yang
+                        kamu dapat di dunia Hu Tao SMP.</p>
+                </div>
+
+                <div class="ranks-grid" id="ranks-grid">
+
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 01 / YELAN</span>
+                            <div class="ticket-seal">遣<br>使</div>
+                        </div>
+                        <h3>Yelan</h3>
+                        <div class="price">Rp15.000<small>Premium Rank I</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 15.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 5</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv3</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                        </ul>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('Yelan','Rp15.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 02 / BENNET</span>
+                            <div class="ticket-seal">助<br>理</div>
+                        </div>
+                        <h3>Bennet</h3>
+                        <div class="price">Rp35.000<small>/Premium Rank II</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 35.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 8</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv5</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <br>
+                        </ul>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur yelan</span>
+                        </div>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('Bennet','Rp35.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 03 / XINGQIU</span>
+                            <div class="ticket-seal">守<br>衛</div>
+                        </div>
+                        <h3>XingQiu</h3>
+                        <div class="price">Rp65.000<small>/Premium Rank III</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 70.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 12</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/pv8</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                        </ul>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur Bennet</span>
+                        </div>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('XingQiu','Rp65.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 04 / ZHONGLI</span>
+                            <div class="ticket-seal">管<br>理</div>
+                        </div>
+                        <h3>ZhongLi</h3>
+                        <div class="price">Rp120.000<small>/Elite Rank</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 100.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 15</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv12</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee </li>
+                        </ul>
+                        <br><br><br><br><br><br><br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur XingQiu</span>
+                        </div>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('ZhongLi','Rp120.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="ticket reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 05 / XIANGLING</span>
+                            <div class="ticket-seal">董<br>事</div>
+                        </div>
+                        <h3>XiangLing</h3>
+                        <div class="price">Rp150.000<small>/Legend Rank</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">Claim block 150.000</span>
+                            <span class="pill" style="font-size: 10px;">Sethome 20</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv16</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee</li>
+                            <li>/tp</li>
+                        </ul>
+                        <br><br><br><br><br><br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur ZhongLi</span>
+                        </div>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('XiangLing','Rp150.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="ticket top reveal">
+                        <div class="ticket-top">
+                            <span class="ticket-no">NO. 06 / HU TAO</span>
+                            <div class="ticket-seal">冥<br>王</div>
+                        </div>
+                        <h3>Hu Tao</h3>
+                        <div class="price">Rp300.000<small>/Mythic Rank</small></div>
+                        <div class="perf"></div>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 8px;">Claim block unlimited</span>
+                            <span class="pill" style="font-size: 8px;">Sethome unlimited</span>
+                        </div>
+                        <ul>
+                            <li>/feed</li>
+                            <li>/anvil</li>
+                            <li>/workbench</li>
+                            <li>/repair</li>
+                            <li>/repair all</li>
+                            <li>/pv20</li>
+                            <li>/kit</li>
+                            <li>/enderchest</li>
+                            <li>/fly</li>
+                            <li>/invsee</li>
+                            <li>/timeset</li>
+                            <li>/weather</li>
+                            <li>/endersee</li>
+                            <li>/tp</li>
+                            <li>/speed</li>
+                            <li>//wand</li>
+                            <h3>+ Boost skill</h3>
+                        </ul>
+                        <br>
+                        <div class="pillrow">
+                            <span class="pill" style="font-size: 10px;">+Semua fitur XiangLing</span>
+                        </div>
+                        <div class="buy">
+                            <a href="javascript:void(0)" onclick="openRankModal('Hu Tao','Rp300.000')">Beli via WhatsApp</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section" id="topup">
+            <div class="wrap">
+
+                <div class="section-head reveal">
+                    <span class="kicker">Isi Ulang Saldo</span>
+                    <h2>Top Up Money, Point & Skill</h2>
+                    <p>Atur jumlah yang kamu mau, total harga terhitung otomatis, lalu kirim pesanan langsung ke admin
+                        via WhatsApp.</p>
+                </div>
+
+                <div class="topup-grid" id="topup-grid">
+
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">💰</div>
+                        <h3>Money</h3>
+                        <div class="topup-rate">Rp100rb (in-game) = <b>Rp5.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('money', -1)">−</button>
+                            <input type="text" id="money-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('money', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="money-total">Rp5.000</span></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('money')">Pesan via WhatsApp</a></div>
+                    </div>
+
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">✨</div>
+                        <h3>Point</h3>
+                        <div class="topup-rate">150 Point = <b>Rp1.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('point', -1)">−</button>
+                            <input type="text" id="point-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('point', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="point-total">Rp1.000</span></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('point')">Pesan via WhatsApp</a></div>
+                    </div>
+
+                    <div class="topup-card reveal">
+                        <div class="topup-icon">🔥</div>
+                        <h3>Skill</h3>
+                        <div class="topup-rate">1 Skill = <b>Rp7.000</b></div>
+                        <div class="stepper">
+                            <button type="button" onclick="stepQty('skill', -1)">−</button>
+                            <input type="text" id="skill-qty" value="1" readonly>
+                            <button type="button" onclick="stepQty('skill', 1)">+</button>
+                        </div>
+                        <div class="topup-total">Total: <span id="skill-total">Rp7.000</span></div>
+                        <div class="buy"><a href="javascript:void(0)" onclick="openTopupModal('skill')">Pesan via WhatsApp</a></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer" style="position: relative; z-index: 1; padding: 40px 0; text-align: center; border-top: 1px solid var(--line);">
+        <div class="wrap">
+            <p style="font-size: .82rem; opacity: .55;">© 2026 Hu Tao SMP — Wangsheng Funeral Parlor. Tidak berafiliasi dengan Mojang / Microsoft.</p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="orderModal" onclick="if(event.target===this) closeModal()">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Pilih Admin</h3>
+                <div class="modal-close" onclick="closeModal()">✕</div>
+            </div>
+            <p class="modal-context" id="modalContext">—</p>
+
+            <span class="modal-label">Kirim pesan ke</span>
+            <div class="admin-options">
+                <div class="admin-option" data-admin="clay" onclick="selectAdmin('clay', this)">
+                    <span class="admin-avatar">C</span> Clay
+                </div>
+                <div class="admin-option" data-admin="winataa" onclick="selectAdmin('winataa', this)">
+                    <span class="admin-avatar">W</span> Winataa
+                </div>
+                <div class="admin-option" data-admin="pedal" onclick="selectAdmin('pedal', this)">
+                    <span class="admin-avatar">P</span> Pedal
+                </div>
+            </div>
+
+            <div id="modalIGNWrap">
+                <span class="modal-label">IGN Minecraft</span>
+                <input type="text" class="modal-input" id="modalIGN" placeholder="Contoh: HuTao_Ganyu">
+            </div>
+
+            <button class="modal-submit" onclick="submitOrder()">Kirim ke WhatsApp</button>
+            <p class="modal-hint">Kamu akan diarahkan ke WhatsApp admin yang dipilih.</p>
+        </div>
+    </div>
+
+    <script>
+
+        const ADMINS = {
+            clay: { name: 'Clay', number: '6285761779383' },
+            winataa: { name: 'Winataa', number: '6285766564830' },
+            pedal: { name: 'Pedal', number: '6289531905129' },
+        };
+
+        let selectedAdminKey = null;
+        let currentBaseMessage = '';
+        let currentNeedsIGN = true;
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 760) closeMobileMenu();
+        });
+
+        /* progress bar scroll */
+        const scrollProgress = document.getElementById('scrollProgress');
+        function updateScrollProgress() {
+            const h = document.documentElement;
+            const scrolled = h.scrollTop;
+            const max = h.scrollHeight - h.clientHeight;
+            const pct = max > 0 ? (scrolled / max) * 100 : 0;
+            scrollProgress.style.width = pct + '%';
+        }
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        updateScrollProgress();
+
+        /* embers */
+        const emberContainer = document.getElementById('embers');
+        const TOTAL_EMBERS = 24;
+
+        for (let i = 0; i < TOTAL_EMBERS; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'ember-dot';
+            dot.style.left = Math.random() * 100 + '%';
+            dot.style.animationDelay = Math.random() * 14 + 's';
+            dot.style.animationDuration = (10 + Math.random() * 10) + 's';
+            emberContainer.appendChild(dot);
+        }
+
+        /* reveal on scroll, staggered per grid */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        function applyStagger(gridId) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            Array.from(grid.children).forEach((el, idx) => {
+                el.style.setProperty('--reveal-delay', (idx % 3) * 0.08 + 's');
+            });
+        }
+        applyStagger('ranks-grid');
+        applyStagger('topup-grid');
+
+        document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+        /* tilt + cursor glow untuk kartu rank & topup */
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            document.querySelectorAll('.ticket, .topup-card').forEach((card) => {
+                card.addEventListener('pointermove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width;
+                    const py = (e.clientY - rect.top) / rect.height;
+                    card.style.setProperty('--mx', (px * 100) + '%');
+                    card.style.setProperty('--my', (py * 100) + '%');
+                    card.style.setProperty('--rx', ((px - 0.5) * 5) + 'deg');
+                    card.style.setProperty('--ry', ((0.5 - py) * 5) + 'deg');
+                });
+                card.addEventListener('pointerleave', () => {
+                    card.style.setProperty('--rx', '0deg');
+                    card.style.setProperty('--ry', '0deg');
+                });
+            });
+        }
+
+        /* kalkulator top up: Money / Point / Skill */
+        const topupRates = {
+            money: 5000,
+            point: 1000,
+            skill: 7000,
+        };
+
+        const topupLabels = {
+            money: 'Rp100rb Money',
+            point: '150 Point',
+            skill: '1 Skill',
+        };
+
+        const topupQty = {
+            money: 1,
+            point: 1,
+            skill: 1,
+        };
+
+        function formatRupiah(amount) {
+            return 'Rp' + amount.toLocaleString('id-ID');
+        }
+
+        function updateTopupCard(itemKey) {
+            const quantity = topupQty[itemKey];
+            const total = quantity * topupRates[itemKey];
+
+            document.getElementById(itemKey + '-qty').value = quantity;
+            document.getElementById(itemKey + '-total').textContent = formatRupiah(total);
+        }
+
+        function stepQty(itemKey, delta) {
+            const MIN_QTY = 1;
+            const MAX_QTY = 99;
+            topupQty[itemKey] = Math.min(MAX_QTY, Math.max(MIN_QTY, topupQty[itemKey] + delta));
+            updateTopupCard(itemKey);
+        }
+
+        Object.keys(topupRates).forEach(updateTopupCard);
+
+        /* modal pilih admin */
+        function openModal(contextText, baseMessage, needsIGN) {
+            document.getElementById('modalContext').textContent = contextText;
+            currentBaseMessage = baseMessage;
+            currentNeedsIGN = needsIGN;
+
+            selectedAdminKey = null;
+            document.querySelectorAll('.admin-option').forEach((el) => el.classList.remove('selected'));
+            document.getElementById('modalIGN').value = '';
+            document.getElementById('modalIGNWrap').style.display = needsIGN ? 'block' : 'none';
+
+            document.getElementById('orderModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('open');
+        }
+
+        function selectAdmin(key, el) {
+            selectedAdminKey = key;
+            document.querySelectorAll('.admin-option').forEach((opt) => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function submitOrder() {
+            if (!selectedAdminKey) {
+                alert('Pilih admin dulu ya, kak!');
+                return;
+            }
+
+            let ign = '';
+            if (currentNeedsIGN) {
+                ign = document.getElementById('modalIGN').value.trim();
+                if (!ign) {
+                    alert('Isi IGN Minecraft dulu ya, kak!');
+                    return;
+                }
+            }
+
+            const admin = ADMINS[selectedAdminKey];
+            let message = currentBaseMessage.replace('{ADMIN}', admin.name);
+            if (currentNeedsIGN) {
+                message += ` IGN: ${ign}`;
+            }
+
+            window.open(`https://wa.me/${admin.number}?text=${encodeURIComponent(message)}`, '_blank');
+            closeModal();
+        }
+
+        function openRankModal(rankName, price) {
+            const contextText = `${rankName} — ${price}`;
+            const baseMessage = `Halo Admin {ADMIN}, saya mau beli rank ${rankName} (${price}).`;
+            openModal(contextText, baseMessage, true);
+        }
+
+        function openTopupModal(itemKey) {
+            const quantity = topupQty[itemKey];
+            const total = formatRupiah(quantity * topupRates[itemKey]);
+            const contextText = `Top Up ${topupLabels[itemKey]} x${quantity} — Total ${total}`;
+            const baseMessage = `Halo Admin {ADMIN}, saya mau top up ${topupLabels[itemKey]} sebanyak ${quantity}x (Total ${total}).`;
+            openModal(contextText, baseMessage, true);
+        }
+
+        function openChatModal() {
+            const contextText = 'Tanya-tanya seputar Hu Tao SMP';
+            const baseMessage = `Halo Admin {ADMIN}, saya mau tanya-tanya soal server Hu Tao SMP.`;
+            openModal(contextText, baseMessage, false);
+        }
+
+    </script>
+
+</body>
+
+</html>

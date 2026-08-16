@@ -24,6 +24,7 @@
             --cream: #f2e6d3;
             --ghost: #f5f0e8;
             --line: rgba(227, 172, 61, 0.28);
+            --merah: #e3453d;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -257,6 +258,70 @@
         .ticket .price { margin-top: 2px; font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; color: var(--cream); }
         .ticket .price small { font-family: 'Work Sans'; font-size: .55em; font-weight: 400; opacity: .6; }
 
+        /* promo diskon 17% */
+        .discount-badge {
+            align-self: flex-start; display: inline-flex; align-items: center; gap: 5px;
+            font-family: 'Silkscreen'; font-size: .6rem; letter-spacing: .05em; text-transform: uppercase;
+            color: #fff; background: linear-gradient(135deg, var(--merah), #a52a1f);
+            padding: 4px 10px; border-radius: 5px; box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+        }
+
+        .ticket.promo-active .price-old {
+            font-size: .9rem; color: var(--cream); opacity: .5; text-decoration: line-through; margin-top: 8px;
+        }
+
+        .ticket.promo-active .price { color: var(--gold-bright); margin-top: 2px; }
+
+        .savings-tag {
+            align-self: flex-start; font-size: .72rem; font-weight: 600; color: #6fbf73;
+            background: rgba(111, 191, 115, .1); border: 1px solid rgba(111, 191, 115, .35);
+            padding: 3px 10px; border-radius: 999px;
+        }
+
+        /* promo strip: banner + countdown di atas ranks-grid */
+        .promo-strip {
+            display: flex; align-items: center; gap: 30px; flex-wrap: wrap; justify-content: center;
+            background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+            padding: 22px; margin-bottom: 52px;
+        }
+
+        .promo-strip-img { flex: 1 1 320px; max-width: 380px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+        .promo-strip-img img { width: 100%; height: auto; display: block; }
+
+        .promo-strip-info { flex: 1 1 260px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+
+        .countdown-label {
+            font-family: 'Silkscreen'; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ember);
+        }
+
+        .countdown { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        .countdown .box {
+            min-width: 62px; padding: 10px 6px; background: var(--maroon-deep); border: 1px solid var(--line);
+            border-radius: 8px; text-align: center;
+        }
+
+        .countdown .box .num { font-family: 'Silkscreen'; font-size: 1.25rem; color: var(--gold-bright); line-height: 1; }
+
+        .countdown .box .lbl {
+            margin-top: 5px; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--cream); opacity: .6;
+        }
+
+        .live-pill {
+            display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+            border-radius: 999px; background: rgba(111, 191, 115, .12); border: 1px solid rgba(111, 191, 115, .4);
+            color: #6fbf73; font-size: .76rem; font-weight: 600;
+        }
+        .live-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: #6fbf73; animation: pulseDot 1.4s ease-in-out infinite; }
+
+        .ended-pill {
+            display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+            border-radius: 999px; background: rgba(227, 172, 61, .08); border: 1px solid var(--line);
+            color: var(--cream); opacity: .75; font-size: .76rem; font-weight: 600;
+        }
+
+        @media (max-width: 560px) { .promo-strip { padding: 18px; } }
+
         .ticket ul { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
         .ticket ul li { position: relative; padding-left: 18px; font-size: .86rem; opacity: .82; }
         .ticket ul li::before { content: "—"; position: absolute; left: 0; color: var(--ember); }
@@ -449,6 +514,8 @@
                 <a href="#rank">Rank</a>
                 <a href="#topup">Top Up</a>
                 <a href="clan.html">Clan</a>
+                <a href="17agustus.html">17 Agustus</a>
+                <a href="logfeed.html">Live Feed</a>
                 <a href="index.html#footer">Server Info</a>
             </div>
 
@@ -465,6 +532,8 @@
             <a href="#rank" onclick="closeMobileMenu()">Rank</a>
             <a href="#topup" onclick="closeMobileMenu()">Top Up</a>
             <a href="clan.html" onclick="closeMobileMenu()">Clan</a>
+            <a href="17agustus.html" onclick="closeMobileMenu()">17 Agustus</a>
+            <a href="logfeed.html" onclick="closeMobileMenu()">Live Feed</a>
             <a href="index.html#footer" onclick="closeMobileMenu()">Server Info</a>
             <a class="chat-admin-link" href="javascript:void(0)" onclick="closeMobileMenu(); openChatModal()">
                 Chat Admin
@@ -487,21 +556,47 @@
             <div class="wrap">
 
                 <div class="section-head reveal">
-                    <span class="kicker">Tiket Keanggotaan</span>
-                    <h2>Pilih Rank-mu</h2>
-                    <p>Setiap rank adalah "tiket" resmi dari Wangsheng — makin tinggi rank, makin banyak fasilitas yang
-                        kamu dapat di dunia Hu Tao SMP.</p>
+                    <span class="kicker">Promo 17 Agustus</span>
+                    <h2 id="rankHeading">Pilih Rank-mu, Lagi Diskon 17%</h2>
+                    <p id="rankDesc">Setiap rank adalah "tiket" resmi dari Wangsheng — makin tinggi rank, makin banyak fasilitas yang
+                        kamu dapat di dunia Hu Tao SMP. Khusus 17 Agustus 2026, semua rank potong 17%.</p>
+                </div>
+
+                <div class="promo-strip reveal" id="promoStrip">
+                    <div class="promo-strip-img">
+                        <img src="diskon-banner.jpg" alt="Promo Diskon 17% Semua Rank Hu Tao SMP">
+                    </div>
+                    <div class="promo-strip-info">
+                        <div class="countdown-label" id="countdownLabel">Promo dimulai dalam</div>
+                        <div class="countdown" id="countdown">
+                            <div class="box"><div class="num" id="cdDays">00</div><div class="lbl">Hari</div></div>
+                            <div class="box"><div class="num" id="cdHours">00</div><div class="lbl">Jam</div></div>
+                            <div class="box"><div class="num" id="cdMins">00</div><div class="lbl">Menit</div></div>
+                            <div class="box"><div class="num" id="cdSecs">00</div><div class="lbl">Detik</div></div>
+                        </div>
+                        <div class="live-pill" id="livePill" style="display:none;">
+                            <span class="dot"></span> Promo sedang berlangsung
+                        </div>
+                        <div class="ended-pill" id="endedPill" style="display:none;">
+                            Promo sudah berakhir — harga kembali normal
+                        </div>
+                    </div>
                 </div>
 
                 <div class="ranks-grid" id="ranks-grid">
 
-                    <div class="ticket reveal">
+                    <div class="ticket promo-active reveal"
+                        data-rank="Yelan" data-plan-label="Premium Rank I"
+                        data-price-normal="Rp15.000" data-price-promo="Rp12.450" data-savings="Hemat Rp2.550">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 01 / YELAN</span>
                             <div class="ticket-seal">遣<br>使</div>
                         </div>
                         <h3>Yelan</h3>
-                        <div class="price">Rp15.000<small>Premium Rank I</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp15.000</div>
+                        <div class="price"><span class="price-amount">Rp12.450</span><small>Premium Rank I</small></div>
+                        <span class="savings-tag">Hemat Rp2.550</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 10px;">Claim block 15.000</span>
@@ -517,17 +612,22 @@
                             <li>/enderchest</li>
                         </ul>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Yelan','Rp15.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
-                    <div class="ticket reveal">
+                    <div class="ticket promo-active reveal"
+                        data-rank="Bennet" data-plan-label="/Premium Rank II"
+                        data-price-normal="Rp35.000" data-price-promo="Rp29.050" data-savings="Hemat Rp5.950">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 02 / BENNET</span>
                             <div class="ticket-seal">助<br>理</div>
                         </div>
                         <h3>Bennet</h3>
-                        <div class="price">Rp35.000<small>/Premium Rank II</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp35.000</div>
+                        <div class="price"><span class="price-amount">Rp29.050</span><small>/Premium Rank II</small></div>
+                        <span class="savings-tag">Hemat Rp5.950</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 10px;">Claim block 35.000</span>
@@ -548,17 +648,22 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur yelan</span>
                         </div>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Bennet','Rp35.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
-                    <div class="ticket reveal">
+                    <div class="ticket promo-active reveal"
+                        data-rank="XingQiu" data-plan-label="/Premium Rank III"
+                        data-price-normal="Rp65.000" data-price-promo="Rp53.950" data-savings="Hemat Rp11.050">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 03 / XINGQIU</span>
                             <div class="ticket-seal">守<br>衛</div>
                         </div>
                         <h3>XingQiu</h3>
-                        <div class="price">Rp65.000<small>/Premium Rank III</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp65.000</div>
+                        <div class="price"><span class="price-amount">Rp53.950</span><small>/Premium Rank III</small></div>
+                        <span class="savings-tag">Hemat Rp11.050</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 10px;">Claim block 70.000</span>
@@ -579,17 +684,22 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur Bennet</span>
                         </div>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('XingQiu','Rp65.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
-                    <div class="ticket reveal">
+                    <div class="ticket promo-active reveal"
+                        data-rank="ZhongLi" data-plan-label="/Elite Rank"
+                        data-price-normal="Rp120.000" data-price-promo="Rp99.600" data-savings="Hemat Rp20.400">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 04 / ZHONGLI</span>
                             <div class="ticket-seal">管<br>理</div>
                         </div>
                         <h3>ZhongLi</h3>
-                        <div class="price">Rp120.000<small>/Elite Rank</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp120.000</div>
+                        <div class="price"><span class="price-amount">Rp99.600</span><small>/Elite Rank</small></div>
+                        <span class="savings-tag">Hemat Rp20.400</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 10px;">Claim block 100.000</span>
@@ -615,17 +725,22 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur XingQiu</span>
                         </div>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('ZhongLi','Rp120.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
-                    <div class="ticket reveal">
+                    <div class="ticket promo-active reveal"
+                        data-rank="XiangLing" data-plan-label="/Legend Rank"
+                        data-price-normal="Rp150.000" data-price-promo="Rp124.500" data-savings="Hemat Rp25.500">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 05 / XIANGLING</span>
                             <div class="ticket-seal">董<br>事</div>
                         </div>
                         <h3>XiangLing</h3>
-                        <div class="price">Rp150.000<small>/Legend Rank</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp150.000</div>
+                        <div class="price"><span class="price-amount">Rp124.500</span><small>/Legend Rank</small></div>
+                        <span class="savings-tag">Hemat Rp25.500</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 10px;">Claim block 150.000</span>
@@ -652,17 +767,22 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur ZhongLi</span>
                         </div>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('XiangLing','Rp150.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
-                    <div class="ticket top reveal">
+                    <div class="ticket top promo-active reveal"
+                        data-rank="Hu Tao" data-plan-label="/Mythic Rank"
+                        data-price-normal="Rp300.000" data-price-promo="Rp249.000" data-savings="Hemat Rp51.000">
                         <div class="ticket-top">
                             <span class="ticket-no">NO. 06 / HU TAO</span>
                             <div class="ticket-seal">冥<br>王</div>
                         </div>
                         <h3>Hu Tao</h3>
-                        <div class="price">Rp300.000<small>/Mythic Rank</small></div>
+                        <span class="discount-badge">−17% Promo</span>
+                        <div class="price-old">Rp300.000</div>
+                        <div class="price"><span class="price-amount">Rp249.000</span><small>/Mythic Rank</small></div>
+                        <span class="savings-tag">Hemat Rp51.000</span>
                         <div class="perf"></div>
                         <div class="pillrow">
                             <span class="pill" style="font-size: 8px;">Claim block unlimited</span>
@@ -692,7 +812,7 @@
                             <span class="pill" style="font-size: 10px;">+Semua fitur XiangLing</span>
                         </div>
                         <div class="buy">
-                            <a href="javascript:void(0)" onclick="openRankModal('Hu Tao','Rp300.000')">Beli via WhatsApp</a>
+                            <a href="javascript:void(0)" onclick="openRankModal(this)">Beli via WhatsApp</a>
                         </div>
                     </div>
 
@@ -978,11 +1098,131 @@
             closeModal();
         }
 
-        function openRankModal(rankName, price) {
-            const contextText = `${rankName} — ${price}`;
-            const baseMessage = `Halo Admin {ADMIN}, saya mau beli rank ${rankName} (${price}).`;
+        /* ---------- rank modal (harga ambil dari state promo saat ini) ---------- */
+        function openRankModal(btnEl) {
+            const ticket = btnEl.closest('.ticket');
+            const rankName = ticket.dataset.rank;
+            const isPromoNow = promoState === 'active';
+            const price = isPromoNow ? ticket.dataset.pricePromo : ticket.dataset.priceNormal;
+
+            const contextText = isPromoNow
+                ? `${rankName} — ${price} (Promo diskon 17%)`
+                : `${rankName} — ${price}`;
+
+            const baseMessage = isPromoNow
+                ? `Halo Admin {ADMIN}, saya mau beli rank ${rankName} pakai promo diskon 17% (${price}).`
+                : `Halo Admin {ADMIN}, saya mau beli rank ${rankName} (${price}).`;
+
             openModal(contextText, baseMessage, true);
         }
+
+        /* ---------- promo 17% : countdown + auto revert harga ---------- */
+        const PROMO_START = new Date('2026-08-17T00:00:00+07:00').getTime();
+        const PROMO_END = new Date('2026-08-17T23:59:59+07:00').getTime();
+
+        let promoState = 'before'; // 'before' | 'active' | 'ended'
+
+        function getPromoState(now) {
+            if (now < PROMO_START) return 'before';
+            if (now <= PROMO_END) return 'active';
+            return 'ended';
+        }
+
+        function applyTicketPrices(state) {
+            document.querySelectorAll('.ticket[data-rank]').forEach((ticket) => {
+                const badge = ticket.querySelector('.discount-badge');
+                const priceOld = ticket.querySelector('.price-old');
+                const savings = ticket.querySelector('.savings-tag');
+                const priceAmount = ticket.querySelector('.price-amount');
+
+                const isActive = state === 'active';
+
+                if (badge) badge.style.display = isActive ? 'inline-flex' : 'none';
+                if (priceOld) priceOld.style.display = isActive ? 'block' : 'none';
+                if (savings) savings.style.display = isActive ? 'inline-flex' : 'none';
+                if (priceAmount) {
+                    priceAmount.textContent = isActive
+                        ? ticket.dataset.pricePromo
+                        : ticket.dataset.priceNormal;
+                }
+
+                ticket.classList.toggle('promo-active', isActive);
+            });
+        }
+
+        function applySectionHeadText(state) {
+            const heading = document.getElementById('rankHeading');
+            if (!heading) return;
+
+            if (state === 'before') {
+                heading.textContent = 'Pilih Rank-mu — Diskon 17% Segera Dimulai';
+            } else if (state === 'active') {
+                heading.textContent = 'Pilih Rank-mu, Lagi Diskon 17%';
+            } else {
+                heading.textContent = 'Pilih Rank-mu';
+            }
+        }
+
+        function updatePromoCountdown() {
+            const now = Date.now();
+            const newState = getPromoState(now);
+            const stateChanged = newState !== promoState;
+            promoState = newState;
+
+            const cdDays = document.getElementById('cdDays');
+            const cdHours = document.getElementById('cdHours');
+            const cdMins = document.getElementById('cdMins');
+            const cdSecs = document.getElementById('cdSecs');
+            const label = document.getElementById('countdownLabel');
+            const countdownBox = document.getElementById('countdown');
+            const livePill = document.getElementById('livePill');
+            const endedPill = document.getElementById('endedPill');
+
+            let diff;
+            if (promoState === 'before') {
+                label.textContent = 'Promo dimulai dalam';
+                diff = PROMO_START - now;
+                livePill.style.display = 'none';
+                endedPill.style.display = 'none';
+                countdownBox.style.display = 'flex';
+            } else if (promoState === 'active') {
+                label.textContent = 'Promo berakhir dalam';
+                diff = PROMO_END - now;
+                livePill.style.display = 'inline-flex';
+                endedPill.style.display = 'none';
+                countdownBox.style.display = 'flex';
+            } else {
+                label.textContent = '';
+                countdownBox.style.display = 'none';
+                livePill.style.display = 'none';
+                endedPill.style.display = 'inline-flex';
+                diff = null;
+            }
+
+            if (diff !== null) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / (1000 * 60)) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                cdDays.textContent = String(days).padStart(2, '0');
+                cdHours.textContent = String(hours).padStart(2, '0');
+                cdMins.textContent = String(mins).padStart(2, '0');
+                cdSecs.textContent = String(secs).padStart(2, '0');
+            }
+
+            if (stateChanged) {
+                applyTicketPrices(promoState);
+                applySectionHeadText(promoState);
+            }
+        }
+
+        // set tampilan awal sesuai waktu saat halaman dibuka, baru mulai interval
+        promoState = getPromoState(Date.now());
+        applyTicketPrices(promoState);
+        applySectionHeadText(promoState);
+        updatePromoCountdown();
+        setInterval(updatePromoCountdown, 1000);
 
         function openTopupModal(itemKey) {
             const quantity = topupQty[itemKey];

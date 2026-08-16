@@ -1339,6 +1339,210 @@
             background: rgba(227, 172, 61, .16);
             color: var(--gold-bright);
         }
+
+        /* ==========================================================
+       12. LIVE FEED (aktivitas server real-time dari bot Discord)
+       ========================================================== */
+        .feed-wrap {
+            max-width: 620px;
+            margin: 34px auto 0;
+            text-align: left;
+        }
+
+        .feed-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .feed-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold-bright);
+        }
+
+        .feed-live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(227, 172, 61, .06);
+            font-size: .78rem;
+            color: var(--cream);
+        }
+
+        .feed-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulseDot 1.8s ease-in-out infinite;
+        }
+
+        .feed-dot.off {
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red);
+            animation: none;
+        }
+
+        .feed-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .feed-filter {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--cream);
+            opacity: .7;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .feed-filter.active,
+        .feed-filter:hover {
+            border-color: var(--gold);
+            color: var(--gold-bright);
+            opacity: 1;
+            background: rgba(227, 172, 61, .1);
+        }
+
+        .feed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .feed-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .feed-list::-webkit-scrollbar-thumb {
+            background: var(--line);
+            border-radius: 999px;
+        }
+
+        .feed-entry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            animation: feedIn .3s ease;
+        }
+
+        @keyframes feedIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            border: 1px solid var(--line);
+            background: var(--maroon-deep);
+            object-fit: cover;
+        }
+
+        .feed-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            background: var(--maroon-deep);
+            border: 1px solid var(--line);
+        }
+
+        .feed-icon.join {
+            color: var(--green);
+        }
+
+        .feed-icon.leave {
+            color: var(--red);
+        }
+
+        .feed-icon.death {
+            color: var(--ember);
+        }
+
+        .feed-icon.advancement {
+            color: var(--gold-bright);
+        }
+
+        .feed-text {
+            flex: 1;
+            min-width: 0;
+            font-size: .88rem;
+            line-height: 1.4;
+        }
+
+        .feed-player {
+            font-weight: 700;
+            color: var(--gold-bright);
+        }
+
+        .feed-msg {
+            color: var(--cream);
+            word-break: break-word;
+        }
+
+        .feed-sub {
+            color: var(--cream);
+            opacity: .65;
+        }
+
+        .feed-time {
+            font-size: .72rem;
+            color: var(--cream);
+            opacity: .45;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .feed-empty {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--cream);
+            opacity: .5;
+            font-style: italic;
+            font-size: .88rem;
+        }
+
+        @media (max-width: 500px) {
+            .feed-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 
@@ -1445,22 +1649,8 @@
                 <span class="pill">Community</span>
             </div>
 
-            <div class="status-card reveal" style="margin-top: 34px;" id="statusCard">
-                <div class="status-left">
-                    <span class="status-dot" id="statusDot"></span>
-                    <span id="statusText">Mengecek status server...</span>
-                </div>
-                <div class="status-right" id="statusPlayers"></div>
-            </div>
-        </section>
-
-    </main>
-
-
-    <!-- ============ FOOTER ============ -->
-    <footer id="footer">
-        <div class="wrap">
-            <div class="ip-groups">
+            <!-- ============ IP : PORT (dipindah ke atas status server) ============ -->
+            <div class="ip-groups reveal" style="margin-top: 34px;">
                 <div class="ip-group">
                     <span class="ip-group-label">Java Edition</span>
                     <div class="ip-row">
@@ -1483,6 +1673,45 @@
                 </div>
             </div>
 
+            <div class="status-card reveal" style="margin-top: 20px;" id="statusCard">
+                <div class="status-left">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Mengecek status server...</span>
+                </div>
+                <div class="status-right" id="statusPlayers"></div>
+            </div>
+
+            <!-- ============ LIVE FEED (aktivitas server real-time) ============ -->
+            <div class="feed-wrap reveal">
+                <div class="feed-head">
+                    <span class="feed-title display">Live Activity</span>
+                    <div class="feed-live-pill">
+                        <span class="feed-dot" id="feedDot"></span>
+                        <span id="feedStatusText">Menghubungkan...</span>
+                    </div>
+                </div>
+
+                <div class="feed-filters">
+                    <button class="feed-filter active" data-filter="all">Semua</button>
+                    <button class="feed-filter" data-filter="chat">Chat</button>
+                    <button class="feed-filter" data-filter="join">Join</button>
+                    <button class="feed-filter" data-filter="leave">Leave</button>
+                    <button class="feed-filter" data-filter="death">Death</button>
+                    <button class="feed-filter" data-filter="advancement">Advancement</button>
+                </div>
+
+                <div class="feed-list" id="feedList">
+                    <div class="feed-empty">Memuat aktivitas...</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ============ FOOTER ============ -->
+    <footer id="footer">
+        <div class="wrap">
             <div class="foot-links">
                 <a href="https://chat.whatsapp.com/JgSKX5OjKLU30SxYpjv9nX?s=cl&p=a&ilr=0&amv=3" target="_blank" rel="noopener">WhatsApp</a>
                 <a href="https://discord.gg/TuKNkSFM5" target="_blank" rel="noopener">Discord</a>
@@ -1916,6 +2145,109 @@
         }
 
         loadVoteAdminCounts();
+
+        /* ----------------------------------------------------------
+           Live Feed — aktivitas server (chat/join/leave/death/dll)
+           Data diambil dari bot Discord kita sendiri via API Railway.
+        ---------------------------------------------------------- */
+        const FEED_API_URL = 'https://mc-log-bot-production.up.railway.app';
+        const FEED_REFRESH_MS = 5000;
+        let feedCurrentFilter = 'all';
+        let feedLastLogs = [];
+
+        document.querySelectorAll('.feed-filter').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.feed-filter').forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+                feedCurrentFilter = btn.dataset.filter;
+                renderFeed(feedLastLogs);
+            });
+        });
+
+        function feedSkinHead(name) {
+            return `https://mc-heads.net/avatar/${encodeURIComponent(name)}/34`;
+        }
+
+        function feedEscapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function feedTimeAgo(ts) {
+            const diff = Math.floor((Date.now() - ts) / 1000);
+            if (diff < 60) return `${diff}d lalu`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m lalu`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}j lalu`;
+            return new Date(ts).toLocaleDateString('id-ID');
+        }
+
+        function renderFeed(logs) {
+            const listEl = document.getElementById('feedList');
+            if (!listEl) return;
+
+            const filtered = feedCurrentFilter === 'all'
+                ? logs
+                : logs.filter((l) => l.type === feedCurrentFilter);
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="feed-empty">Belum ada aktivitas untuk ditampilkan.</div>`;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map((entry) => {
+                let iconHtml, mainHtml;
+
+                if (entry.type === 'chat') {
+                    iconHtml = `<img class="feed-avatar" src="${feedSkinHead(entry.player)}" alt="${feedEscapeHtml(entry.player)}">`;
+                    mainHtml = `<span class="feed-player">${feedEscapeHtml(entry.player)}</span> <span class="feed-msg">${feedEscapeHtml(entry.message || '')}</span>`;
+                } else if (entry.type === 'join') {
+                    iconHtml = `<div class="feed-icon join">➜</div>`;
+                    mainHtml = `<span class="feed-player">${feedEscapeHtml(entry.player)}</span> <span class="feed-sub">bergabung ke server</span>`;
+                } else if (entry.type === 'leave') {
+                    iconHtml = `<div class="feed-icon leave">⇠</div>`;
+                    mainHtml = `<span class="feed-player">${feedEscapeHtml(entry.player)}</span> <span class="feed-sub">keluar dari server</span>`;
+                } else if (entry.type === 'death') {
+                    iconHtml = `<div class="feed-icon death">💀</div>`;
+                    mainHtml = `<span class="feed-sub">${feedEscapeHtml(entry.message || '')}</span>`;
+                } else if (entry.type === 'advancement') {
+                    iconHtml = `<div class="feed-icon advancement">🏆</div>`;
+                    mainHtml = `<span class="feed-player">${feedEscapeHtml(entry.player || '')}</span> <span class="feed-sub">${feedEscapeHtml(entry.message || '')}</span>`;
+                } else {
+                    iconHtml = `<div class="feed-icon">•</div>`;
+                    mainHtml = `<span class="feed-sub">${feedEscapeHtml(entry.message || entry.player || '')}</span>`;
+                }
+
+                return `
+                    <div class="feed-entry">
+                        ${iconHtml}
+                        <div class="feed-text">${mainHtml}</div>
+                        <div class="feed-time">${feedTimeAgo(entry.timestamp)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function fetchFeed() {
+            const dotEl = document.getElementById('feedDot');
+            const textEl = document.getElementById('feedStatusText');
+
+            try {
+                const res = await fetch(`${FEED_API_URL}/api/logs`);
+                if (!res.ok) throw new Error('bad response');
+                const data = await res.json();
+                feedLastLogs = data.logs || [];
+                if (dotEl) dotEl.classList.remove('off');
+                if (textEl) textEl.textContent = 'Live — terhubung';
+                renderFeed(feedLastLogs);
+            } catch (err) {
+                if (dotEl) dotEl.classList.add('off');
+                if (textEl) textEl.textContent = 'Nggak bisa konek';
+            }
+        }
+
+        fetchFeed();
+        setInterval(fetchFeed, FEED_REFRESH_MS);
 
     </script>
 
